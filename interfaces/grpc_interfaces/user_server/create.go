@@ -15,6 +15,8 @@ func (s *UserServiceServer) CreateUser(ctx context.Context, req *user.CreateUser
 		PasswordHash: req.Password,
 	}
 	log.Println("DEBUG: before create use cases") // ← это должно точно появиться
+	log.Println(s.userUseCases)                   // ← это должно точно появиться
+	log.Println("after print usecases")           // ← это должно точно появиться
 	userID, err := s.userUseCases.CreateUser(ctx, entity)
 	if err != nil {
 		return &user.CreateUserResponse{
