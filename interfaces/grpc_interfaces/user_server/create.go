@@ -5,6 +5,7 @@ import (
 	"go_server/application/use_cases"
 	"go_server/domain/entities"
 	"go_server/infrastructure/grpc_infr/user/user"
+	"log"
 )
 
 func (s *UserServiceServer) CreateUser(ctx context.Context, req *user.CreateUserRequest) (*user.CreateUserResponse, error) {
@@ -13,6 +14,7 @@ func (s *UserServiceServer) CreateUser(ctx context.Context, req *user.CreateUser
 		Email:        req.Email,
 		PasswordHash: req.Password,
 	}
+	log.Println("DEBUG: before create use cases") // ← это должно точно появиться
 	userID, err := s.userUseCases.CreateUser(ctx, entity)
 	if err != nil {
 		return &user.CreateUserResponse{
