@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package global_deck;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "infrastructure/grpc_infr/global_deck;global_deck";
+message GlobalDeck{
+  int32 id = 1;
+  string title = 2;
+  optional string description = 3;
+  int32 authorID = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  bool isPublic = 7;
+  repeated string tags = 8;
+  int32 version = 9;
+}
+
+service GlobalDeckService {
+  rpc CreateGlobalDeck (CreateGlobalDeckRequest) returns (CreateGlobalDeckResponse);
+  rpc GetEditableGlobalDecks (GetEditableDecksRequest) returns (GetEditableDecksResponse);
+  rpc UpdateGlobalDeck (UpdateGlobalDeckRequest) returns (UpdateGlobalDeckResponse);
+  rpc GetGlobalDeckInfoByID (GetGlobalDeckInfoByIDRequest) returns (GetGlobalDeckInfoByIDResponse);
+  rpc DeleteGlobalDeck (DeleteGlobalDeckRequest) returns (DeleteGlobalDeckResponse);
+  rpc SearchGlobalDecks (SearchGlobalDecksRequest) returns (SearchGlobalDecksResponse);
+  rpc AddDeckToLearningDecks (AddDeckToLearningDecksRequest) returns (AddDeckToLearningDecksResponse);
+  rpc AddEditorToGlobalDeck (AddEditorToGlobalDeckRequest) returns (AddEditorToGlobalDeckResponse);
+  rpc DemoteEditorToLearner (DemoteEditorToLearnerRequest) returns (DemoteEditorToLearnerResponse);
+}
+message CreateGlobalDeckRequest{
+  string title = 1;
+  string description = 2;
+  bool isPublic = 3;
+}
+message CreateGlobalDeckResponse{
+  int32 id = 1;
+}
+message GetEditableDecksRequest {}
+message GetEditableDecksResponse{
+  repeated GlobalDeck listOfGlobalDecks = 1;
+}
+
+message UpdateGlobalDeckRequest{
+  GlobalDeck globalDeck = 1;
+}
+message UpdateGlobalDeckResponse{
+  GlobalDeck conflictDeck = 1;
+  bool isSuccess = 2;
+}
+message GetGlobalDeckInfoByIDRequest{
+  int32 id = 1;
+}
+message GetGlobalDeckInfoByIDResponse{
+  GlobalDeck globalDeck = 1;
+  string authName = 2;
+  repeated string editorNames = 3;
+}
+message  DeleteGlobalDeckRequest{
+  int32 deckID = 1;
+}
+message DeleteGlobalDeckResponse{
+  bool isSuccess = 1;
+}
+
+message SearchGlobalDecksRequest {
+  string query = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+
+message SearchGlobalDecksResponse {
+  repeated SearchResultDeck results = 1;
+  bool has_more = 2;
+}
+
+message SearchResultDeck {
+  GlobalDeck deck = 1;
+  bool is_already_added = 2;
+}
+message  AddDeckToLearningDecksRequest{
+  int32  deckID = 1;
+}
+message  AddDeckToLearningDecksResponse{
+  bool isSuccess = 1;
+}
+message AddEditorToGlobalDeckRequest{
+  int32 deck_ID = 1;
+  string user_name = 2;
+}
+message  AddEditorToGlobalDeckResponse{
+  bool isSuccess = 1;
+}
+message DemoteEditorToLearnerRequest{
+  int32 deck_ID = 1;
+  string user_name = 2;
+}
+message DemoteEditorToLearnerResponse{
+  bool isSuccess = 1;
+}

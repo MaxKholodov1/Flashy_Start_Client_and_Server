@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package user.validation;
+
+option go_package = "infrastructure/grpc_infr/user/validation;validation";
+
+service ValidationService {
+  rpc CheckUserNameAvailability (CheckUserNameAvailabilityRequest) returns (CheckUserNameAvailabilityResponse);
+  rpc CheckUserEmailAvailability (CheckUserEmailAvailabilityRequest) returns (CheckUserEmailAvailabilityResponse);
+  rpc CheckPasswordValidity (CheckUserPasswordAvailabilityRequest) returns (CheckUserPasswordAvailabilityResponse);
+}
+
+message CheckUserNameAvailabilityRequest {
+  string userName = 1;
+}
+
+message CheckUserNameAvailabilityResponse {
+  bool is_available = 1;
+}
+
+message CheckUserEmailAvailabilityRequest {
+  string userEmail = 1;
+}
+
+message CheckUserEmailAvailabilityResponse {
+  bool is_available = 1;
+}
+
+message CheckUserPasswordAvailabilityRequest {
+  string password = 1;
+}
+
+message CheckUserPasswordAvailabilityResponse {
+  bool is_valid = 1;
+}
