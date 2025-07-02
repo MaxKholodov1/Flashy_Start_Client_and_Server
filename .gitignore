@@ -1,3 +1,20 @@
+# Бинарные файлы
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Файлы тестов
+*.test
+
+# Временные файлы
+*.out
+
+# IDE и редакторы
+.idea/
+.vscode/
 # Miscellaneous
 *.class
 *.log
@@ -23,6 +40,8 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
+# Файлы окружения
+.env
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
@@ -33,6 +52,8 @@ Client/.flutter-plugins-dependencies
 .pub/
 /build/
 
+# Кэш go modules
+/pkg/
 # Symbolication related
 app.*.symbols
 
