@@ -15,7 +15,7 @@ func (u *GlobalDeckUseCases) AddDeckToLearningDecks(ctx context.Context, accessT
 	}
 	deck, err := u.globalDeckRepository.GetByID(deckID)
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	if deck.IsPublic == false {
 		return false, use_cases.ErrDeckPermissionDenied
@@ -23,7 +23,7 @@ func (u *GlobalDeckUseCases) AddDeckToLearningDecks(ctx context.Context, accessT
 	perm, err := u.deckPermissionRepository.GetDeckPermissionByUserIDAndDeckID(ctx, userID, deckID)
 	if err != nil {
 		if !errors.Is(err, pgx.ErrNoRows) {
-			return false, use_cases.ErrDBFailure
+			return false, use_cases.ErrDBFailure(err)
 		}
 	}
 	if perm != nil {
@@ -31,7 +31,7 @@ func (u *GlobalDeckUseCases) AddDeckToLearningDecks(ctx context.Context, accessT
 	}
 	err = u.deckPermissionRepository.Create(ctx, &entities.DeckPermission{DeckID: deckID, UserID: userID, Role: "Learner"})
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	return true, nil
 }

@@ -22,7 +22,7 @@ func (u *GlobalCardUseCases) UpdateGlobalCard(ctx context.Context, cardID, versi
 		if err == pgx.ErrNoRows {
 			return nil, nil, use_cases.ErrGlobalCardNotFound
 		}
-		return nil, nil, use_cases.ErrDBFailure
+		return nil, nil, use_cases.ErrDBFailure(err)
 	}
 	deckID := currentCard.DeckID
 	deckPermissionsByUserID, err := u.deckPermissionRepository.GetDeckPermissionsByUserID(ctx, userID)
@@ -43,7 +43,7 @@ func (u *GlobalCardUseCases) UpdateGlobalCard(ctx context.Context, cardID, versi
 	}
 	err = u.globalCardRepository.UpdateCardByID(cardID, question, answer, version+1)
 	if err != nil {
-		return nil, nil, use_cases.ErrDBFailure
+		return nil, nil, use_cases.ErrDBFailure(err)
 	}
 	isSuccess = true
 	return nil, &isSuccess, nil

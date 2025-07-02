@@ -14,12 +14,12 @@ func (u *GlobalDeckUseCases) SearchGlobalDecks(ctx context.Context, query, acces
 
 	decks, hasMore, err := u.globalDeckRepository.SearchByTitleOffset(query, limit, offset)
 	if err != nil {
-		return nil, false, use_cases.ErrDBFailure
+		return nil, false, use_cases.ErrDBFailure(err)
 	}
 
 	permissions, err := u.deckPermissionRepository.GetDeckPermissionsByUserID(ctx, userID)
 	if err != nil {
-		return nil, false, use_cases.ErrDBFailure
+		return nil, false, use_cases.ErrDBFailure(err)
 	}
 
 	addedDeckIDs := make(map[int]struct{})

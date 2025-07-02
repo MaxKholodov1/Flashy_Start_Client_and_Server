@@ -12,14 +12,14 @@ func (u *GlobalDeckUseCases) DeleteGlobalDeck(ctx context.Context, accessToken s
 	}
 	globalDeck, err := u.globalDeckRepository.GetByID(deckID)
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	if globalDeck.AuthorID != userID {
 		return false, use_cases.ErrDeckPermissionDenied
 	}
 	err = u.globalDeckRepository.Delete(deckID)
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	return true, nil
 }

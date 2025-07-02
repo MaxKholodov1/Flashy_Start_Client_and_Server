@@ -20,7 +20,7 @@ func (u *UserUseCases) CheckUserNameAvailability(ctx context.Context, userName s
 			return true, nil
 		}
 		log.Println(err.Error()) // ← это должно точно появиться
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 
 	return false, use_cases.ErrUsernameTaken

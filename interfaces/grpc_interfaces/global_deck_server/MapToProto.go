@@ -33,8 +33,6 @@ func MapGlobalDeckErrToGrpcErr(err error) error {
 		return status.Error(codes.AlreadyExists, err.Error())
 	case use_cases.ErrUserNotFound:
 		return status.Error(codes.NotFound, err.Error())
-	case use_cases.ErrDBFailure:
-		return status.Error(codes.Internal, err.Error())
 	case use_cases.ErrAccessTokenInvalid:
 		return status.Error(codes.Unauthenticated, err.Error())
 	case use_cases.ErrInvalidTitleOfGlobalDeck:

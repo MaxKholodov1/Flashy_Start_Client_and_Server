@@ -16,8 +16,6 @@ func MapValidationErrToGrpcErr(err error) error {
 		return status.Error(codes.InvalidArgument, err.Error())
 	case use_cases.ErrUsernameTaken:
 		return status.Error(codes.AlreadyExists, err.Error())
-	case use_cases.ErrDBFailure:
-		return status.Error(codes.Internal, err.Error())
 	case validation.ErrInvalidEmailFormat:
 		return status.Error(codes.InvalidArgument, err.Error())
 	case use_cases.ErrEmailTaken:

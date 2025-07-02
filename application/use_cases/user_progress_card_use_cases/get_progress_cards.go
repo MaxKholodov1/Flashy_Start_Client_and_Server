@@ -21,24 +21,24 @@ func (u *UserProgressCardUseCases) GetProgressCardsByDeckID(ctx context.Context,
 	}
 	globalDeck, err := u.globalDeckRepository.GetByID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	permission, err := u.deckPermissionRepository.GetDeckPermissionByUserIDAndDeckID(ctx, userID, deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	if globalDeck.IsPublic == false && (permission.Role != "Editor" && permission.Role != "Author") {
 		return nil, use_cases.ErrDeckPermissionDenied
 	}
 	globalCards, err := u.globalCardRepository.GetCardsByDeckID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	userProgressCards := make([]*entities.UserProgressCard, 0)
 	for _, card := range globalCards {
 		progress, err := u.userProgressCardRepository.GetByUserIDAndCardID(ctx, userID, card.ID)
 		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
-			return nil, use_cases.ErrDBFailure
+			return nil, use_cases.ErrDBFailure(err)
 		}
 
 		if progress == nil {
@@ -55,7 +55,7 @@ func (u *UserProgressCardUseCases) GetProgressCardsByDeckID(ctx context.Context,
 
 			_, err := u.userProgressCardRepository.Create(ctx, newRecord)
 			if err != nil {
-				return nil, use_cases.ErrDBFailure
+				return nil, use_cases.ErrDBFailure(err)
 			}
 			progress = newRecord
 		}
@@ -86,24 +86,24 @@ func (u *UserProgressCardUseCases) GetCardsForTodayReview(ctx context.Context, d
 	}
 	globalDeck, err := u.globalDeckRepository.GetByID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	permission, err := u.deckPermissionRepository.GetDeckPermissionByUserIDAndDeckID(ctx, userID, deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	if globalDeck.IsPublic == false && (permission.Role != "Editor" && permission.Role != "Author") {
 		return nil, use_cases.ErrDeckPermissionDenied
 	}
 	globalCards, err := u.globalCardRepository.GetCardsByDeckID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	userProgressCards := make([]*entities.UserProgressCard, 0)
 	for _, card := range globalCards {
 		progress, err := u.userProgressCardRepository.GetByUserIDAndCardID(ctx, userID, card.ID)
 		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
-			return nil, use_cases.ErrDBFailure
+			return nil, use_cases.ErrDBFailure(err)
 		}
 
 		if progress == nil {
@@ -120,7 +120,7 @@ func (u *UserProgressCardUseCases) GetCardsForTodayReview(ctx context.Context, d
 
 			_, err := u.userProgressCardRepository.Create(ctx, newRecord)
 			if err != nil {
-				return nil, use_cases.ErrDBFailure
+				return nil, use_cases.ErrDBFailure(err)
 			}
 			progress = newRecord
 		}

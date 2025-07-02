@@ -17,16 +17,16 @@ func (u *GlobalCardUseCases) DeleteCard(ctx context.Context, cardID int, accessT
 		if errors.Is(err, pgx.ErrNoRows) {
 			return true, nil
 		}
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	deckPermission, err := u.deckPermissionRepository.GetDeckPermissionByUserIDAndDeckID(ctx, userID, card.DeckID)
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	if card.AuthorID == userID || deckPermission.Role == "Editor" {
 		err = u.globalCardRepository.DeleteCardByID(cardID)
 		if err != nil {
-			return false, use_cases.ErrDBFailure
+			return false, use_cases.ErrDBFailure(err)
 		}
 		return true, nil
 	}

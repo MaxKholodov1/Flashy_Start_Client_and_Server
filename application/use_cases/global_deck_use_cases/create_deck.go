@@ -17,7 +17,7 @@ func (u *GlobalDeckUseCases) CreateDeckWithPermission(ctx context.Context, title
 	}
 	tx, err := u.db.Begin(ctx)
 	if err != nil {
-		return 0, use_cases.ErrDBFailure
+		return 0, use_cases.ErrDBFailure(err)
 	}
 	defer func() {
 		if err != nil {
@@ -27,7 +27,7 @@ func (u *GlobalDeckUseCases) CreateDeckWithPermission(ctx context.Context, title
 	id, err := u.globalDeckRepository.CreateTx(ctx, tx, title,
 		*description, isPublic, authID, 1)
 	if err != nil {
-		return 0, use_cases.ErrDBFailure
+		return 0, use_cases.ErrDBFailure(err)
 	}
 	var ID = id
 
@@ -39,11 +39,11 @@ func (u *GlobalDeckUseCases) CreateDeckWithPermission(ctx context.Context, title
 
 	err = u.deckPermissionRepository.CreateTx(ctx, tx, &deckPermission)
 	if err != nil {
-		return 0, use_cases.ErrDBFailure
+		return 0, use_cases.ErrDBFailure(err)
 	}
 	err = tx.Commit(ctx)
 	if err != nil {
-		return 0, use_cases.ErrDBFailure
+		return 0, use_cases.ErrDBFailure(err)
 	}
 	return ID, nil
 }

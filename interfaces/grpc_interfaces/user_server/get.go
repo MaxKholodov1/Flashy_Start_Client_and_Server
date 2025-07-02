@@ -15,7 +15,7 @@ func (s *UserServiceServer) GetUser(ctx context.Context, req *user.GetUserReques
 
 	u, err := s.userUseCases.GetUserByID(ctx, userID)
 	if err != nil {
-		return nil, MapUserErrToGrpcErr(use_cases.ErrDBFailure)
+		return nil, MapUserErrToGrpcErr(use_cases.ErrDBFailure((err)))
 	}
 
 	return &user.GetUserResponse{

@@ -9,7 +9,7 @@ import (
 func (u *UserDeckProgressUseCases) GetUserLearningProgressDecks(ctx context.Context, userID int) ([]*entities.UserDeckProgress, error) {
 	deckPermissions, err := u.deckPermissionRepository.GetDeckPermissionsByUserID(ctx, userID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 
 	var result []*entities.UserDeckProgress

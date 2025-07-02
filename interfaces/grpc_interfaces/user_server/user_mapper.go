@@ -27,9 +27,6 @@ func MapUserErrToGrpcErr(err error) error {
 	case validation.ErrPasswordPolicy,
 		validation.ErrPasswordLength:
 		return status.Error(codes.InvalidArgument, err.Error())
-
-	case use_cases.ErrDBFailure:
-		return status.Error(codes.Internal, err.Error())
 	case use_cases.ErrFailedToGeneratePasswordHash:
 		return status.Error(codes.Internal, err.Error())
 	case use_cases.ErrAccessTokenInvalid:

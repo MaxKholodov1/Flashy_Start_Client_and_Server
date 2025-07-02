@@ -39,7 +39,7 @@ func (u *UserUseCases) CreateUser(ctx context.Context, user *entities.User) (int
 	log.Printf("DEBUG: userRepo = %#v", u.userRepository)
 	id, err := u.userRepository.Create(user)
 	if err != nil {
-		return 0, use_cases.ErrDBFailure
+		return 0, use_cases.ErrDBFailure(err)
 	}
 
 	return id, nil

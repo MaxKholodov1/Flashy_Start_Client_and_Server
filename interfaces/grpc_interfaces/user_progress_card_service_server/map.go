@@ -20,8 +20,6 @@ func timestampToTimePtr(ts *timestamppb.Timestamp) *time.Time {
 }
 func MapProgressCardErrToGrpcErr(err error) error {
 	switch err {
-	case use_cases.ErrDBFailure:
-		return status.Error(codes.Internal, err.Error())
 	case use_cases.ErrAccessTokenInvalid:
 		return status.Error(codes.Unauthenticated, err.Error())
 	case use_cases.ErrDeckPermissionDenied:

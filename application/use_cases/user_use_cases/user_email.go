@@ -19,7 +19,7 @@ func (u *UserUseCases) CheckUserEmailAvailability(ctx context.Context, userEmail
 		if errors.Is(err, pgx.ErrNoRows) {
 			return true, nil
 		}
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 
 	return false, use_cases.ErrEmailTaken

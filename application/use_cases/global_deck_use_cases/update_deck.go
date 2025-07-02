@@ -13,7 +13,7 @@ func (u *GlobalDeckUseCases) UpdateGlobalDeck(ctx context.Context, globalDeck en
 	}
 	currentDeck, err := u.globalDeckRepository.GetByID(globalDeck.ID)
 	if err != nil {
-		return nil, nil, use_cases.ErrDBFailure
+		return nil, nil, use_cases.ErrDBFailure(err)
 	}
 	isSuccess := false
 	if currentDeck.Version > globalDeck.Version {
@@ -34,7 +34,7 @@ func (u *GlobalDeckUseCases) UpdateGlobalDeck(ctx context.Context, globalDeck en
 	isSuccess = true
 	err = u.globalDeckRepository.Update(globalDeck.ID, &globalDeck.Title, globalDeck.Description, globalDeck.Tags, globalDeck.Version+1)
 	if err != nil {
-		return nil, nil, use_cases.ErrDBFailure
+		return nil, nil, use_cases.ErrDBFailure(err)
 	}
 	return nil, &isSuccess, nil
 }

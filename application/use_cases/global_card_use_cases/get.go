@@ -18,13 +18,13 @@ func (u *GlobalCardUseCases) GetGlobalCardsByDeckID(ctx context.Context, deckID 
 	}
 	deck, err := u.globalDeckRepository.GetByID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	authorID := deck.AuthorID
 	var permissions []*entities.DeckPermission
 	permissions, err = u.deckPermissionRepository.GetDeckPermissionsByDeckID(ctx, deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	var isEditor = false
 	for _, permission := range permissions {
@@ -41,7 +41,7 @@ func (u *GlobalCardUseCases) GetGlobalCardsByDeckID(ctx context.Context, deckID 
 	var listOfGlobalCards []*entities.GlobalCard
 	listOfGlobalCards, err = u.globalCardRepository.GetCardsByDeckID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	sort.Slice(listOfGlobalCards, func(i, j int) bool {
 		return listOfGlobalCards[i].CreatedAt.After(listOfGlobalCards[j].CreatedAt)

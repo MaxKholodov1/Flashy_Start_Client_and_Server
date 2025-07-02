@@ -18,7 +18,7 @@ func (u *GlobalDeckUseCases) GetEditableGlobalDecks(ctx context.Context) ([]*ent
 	}
 	listOfDeckPermissions, err := u.deckPermissionRepository.GetDeckPermissionsByUserID(ctx, userID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	var listOfEditableDecks []*entities.GlobalDeck
 	for _, deckPermission := range listOfDeckPermissions {

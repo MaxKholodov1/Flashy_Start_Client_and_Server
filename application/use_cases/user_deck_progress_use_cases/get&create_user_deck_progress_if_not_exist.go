@@ -13,7 +13,7 @@ func CreateUserDeckProgressIfNotExist(ctx context.Context, userDeckProgressRepo 
 	progress, err := userDeckProgressRepo.GetByUserIDAndDeckID(ctx, userID, deckID)
 	deck, err := globalDeckRepo.GetByID(deckID)
 	if err != nil {
-		return nil, use_cases.ErrDBFailure
+		return nil, use_cases.ErrDBFailure(err)
 	}
 	if progress == nil {
 		newProgress := &entities.UserDeckProgress{
@@ -26,7 +26,7 @@ func CreateUserDeckProgressIfNotExist(ctx context.Context, userDeckProgressRepo 
 		}
 		_, err := userDeckProgressRepo.Create(ctx, &models.UserDeckProgressRecord{UserID: userID, DeckID: deckID, Score: 0, LastReviewedAt: time.Time{}})
 		if err != nil {
-			return nil, use_cases.ErrDBFailure
+			return nil, use_cases.ErrDBFailure(err)
 		}
 		return newProgress, nil
 	}

@@ -26,12 +26,12 @@ func (u *UserDeckProgressUseCases) SelectDecksForTodayReview(
 	for _, deck := range decks {
 		_, err := u.deckPermissionRepository.GetDeckPermissionByUserIDAndDeckID(ctx, userID, deck.DeckID)
 		if err != nil {
-			return nil, use_cases.ErrDBFailure
+			return nil, use_cases.ErrDBFailure(err)
 		}
 
 		cards, err := u.progressCardRepository.GetByUserIDAndDeckID(ctx, userID, deck.DeckID)
 		if err != nil {
-			return nil, use_cases.ErrDBFailure
+			return nil, use_cases.ErrDBFailure(err)
 		}
 
 		flag := false

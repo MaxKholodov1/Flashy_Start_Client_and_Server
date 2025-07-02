@@ -19,7 +19,7 @@ func (u *GlobalDeckUseCases) AddEditorToGlobalDeck(ctx context.Context, deckID i
 	}
 	globalDeck, err := u.globalDeckRepository.GetByID(deckID)
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	if globalDeck.AuthorID != userID {
 		return false, use_cases.ErrDeckPermissionDenied
@@ -30,7 +30,7 @@ func (u *GlobalDeckUseCases) AddEditorToGlobalDeck(ctx context.Context, deckID i
 		if errors.Is(err, pgx.ErrNoRows) {
 			return false, use_cases.ErrUserNotFound
 		}
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	if int(userToAdd.ID) == globalDeck.AuthorID {
 		return false, use_cases.ErrSuchPermissionAlreadyExists
@@ -38,7 +38,7 @@ func (u *GlobalDeckUseCases) AddEditorToGlobalDeck(ctx context.Context, deckID i
 	perm, err := u.deckPermissionRepository.GetDeckPermissionByUserIDAndDeckID(ctx, int(userToAdd.ID), deckID)
 	if err != nil {
 		if !errors.Is(err, pgx.ErrNoRows) {
-			return false, use_cases.ErrDBFailure
+			return false, use_cases.ErrDBFailure(err)
 		}
 	}
 	if perm != nil {
@@ -47,7 +47,7 @@ func (u *GlobalDeckUseCases) AddEditorToGlobalDeck(ctx context.Context, deckID i
 		} else if perm.Role == "Learner" {
 			err = u.deckPermissionRepository.UpdateRoleByUserIDAndDeckID(ctx, int(userToAdd.ID), deckID, "Editor")
 			if err != nil {
-				return false, use_cases.ErrDBFailure
+				return false, use_cases.ErrDBFailure(err)
 			}
 			return true, nil
 		}
@@ -59,7 +59,7 @@ func (u *GlobalDeckUseCases) AddEditorToGlobalDeck(ctx context.Context, deckID i
 		Role:   "Editor",
 	})
 	if err != nil {
-		return false, use_cases.ErrDBFailure
+		return false, use_cases.ErrDBFailure(err)
 	}
 	return true, nil
 }

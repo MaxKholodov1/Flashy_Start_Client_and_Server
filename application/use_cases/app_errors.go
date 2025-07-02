@@ -1,11 +1,14 @@
 package use_cases
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	ErrUsernameTaken = errors.New("username is already taken")
 
-	ErrDBFailure = errors.New("failed to access user repository")
+	ErrDBFailureBase = errors.New("database failure")
 
 	ErrEmailTaken                      = errors.New("email is already taken")
 	ErrAccessTokenInvalidSignature     = errors.New("access token has invalid signature")
@@ -36,3 +39,10 @@ var (
 	ErrAuthorCantDeleteProgressDeck    = errors.New("author can't delete progress deck")
 	ErrPermissionNotFound              = errors.New("permission not found")
 )
+
+func ErrDBFailure(err error) error {
+	if err == nil {
+		return ErrDBFailureBase
+	}
+	return fmt.Errorf("%w: %v", ErrDBFailureBase, err)
+}

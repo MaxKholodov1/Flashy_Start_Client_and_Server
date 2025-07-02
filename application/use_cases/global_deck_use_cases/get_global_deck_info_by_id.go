@@ -17,17 +17,17 @@ func (u *GlobalDeckUseCases) GetGlobalDeckInfoByID(ctx context.Context, deckID i
 	}
 	deck, ok := u.globalDeckRepository.GetByID(deckID)
 	if ok != nil {
-		return nil, nil, nil, use_cases.ErrDBFailure
+		return nil, nil, nil, use_cases.ErrDBFailure(err)
 	}
 	var authorID int = deck.AuthorID
 	author, err := u.userRepository.GetByID(authorID)
 	if err != nil {
-		return nil, nil, nil, use_cases.ErrDBFailure
+		return nil, nil, nil, use_cases.ErrDBFailure(err)
 	}
 	var permissions []*entities.DeckPermission
 	permissions, err = u.deckPermissionRepository.GetDeckPermissionsByDeckID(ctx, deckID)
 	if err != nil {
-		return nil, nil, nil, use_cases.ErrDBFailure
+		return nil, nil, nil, use_cases.ErrDBFailure(err)
 	}
 	var isEditor = false
 	var editorNames []string
@@ -38,7 +38,7 @@ func (u *GlobalDeckUseCases) GetGlobalDeckInfoByID(ctx context.Context, deckID i
 				isEditor = true
 			}
 			if err != nil {
-				return nil, nil, nil, use_cases.ErrDBFailure
+				return nil, nil, nil, use_cases.ErrDBFailure(err)
 			}
 			editorNames = append(editorNames, editor.UserName)
 		}
