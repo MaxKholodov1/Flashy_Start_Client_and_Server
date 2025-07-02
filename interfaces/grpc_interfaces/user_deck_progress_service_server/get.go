@@ -4,7 +4,6 @@ import (
 	"context"
 	"go_server/application/use_cases"
 	"go_server/infrastructure/grpc_infr/user_deck_progress"
-	"slices"
 )
 
 func (s *UserDeckProgressService) GetUserLearningProgressDecks(ctx context.Context, req *user_deck_progress.GetUserLearningProgressDecksRequest) (*user_deck_progress.GetUserLearningProgressDecksResponse, error) {
@@ -20,7 +19,7 @@ func (s *UserDeckProgressService) GetUserLearningProgressDecks(ctx context.Conte
 	if err != nil {
 		return nil, MapUserDeckProgressErrToGrpcErr(err)
 	}
-	slices.Reverse(userDeckProgressList)
+	//slices.Reverse(userDeckProgressList)
 	var pbUserDeckProgressList []*user_deck_progress.UserDeckProgress
 	pbUserDeckProgressList = ConvertUserDeckProgressListToProto(userDeckProgressList)
 	return &user_deck_progress.GetUserLearningProgressDecksResponse{
