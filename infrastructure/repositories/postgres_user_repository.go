@@ -30,6 +30,7 @@ func (r *PostgresUserRepository) Create(user *entities.User) (int, error) {
 		now,
 	).Scan(&id)
 	if err != nil {
+		print(err.Error())
 		return 0, err
 	}
 	return id, nil
