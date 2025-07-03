@@ -24,6 +24,7 @@ import (
 	user_server "go_server/interfaces/grpc_interfaces/user_server"
 	validation_server "go_server/interfaces/grpc_interfaces/validation_service_server"
 	"log"
+	"log/slog"
 	"net"
 	"os"
 	"time"
@@ -36,7 +37,20 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
+	logFile, err := os.OpenFile("/home/super/logs/flashcard_server.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatalf("Не удалось открыть лог-файл: %v", err)
+	}
+	// Создаём хендлер
+	handler := slog.NewTextHandler(logFile, &slog.HandlerOptions{
+		Level: slog.LevelInfo, // можно сменить на Debug, Warn, Error
+	})
+
+	// Устанавливаем глобальный логгер
+	logger := slog.New(handler)
+	slog.SetDefault(logger)
+
+	err = godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -89,8 +103,9 @@ func main() {
 	global_deck_service_server.RegisterGlobalDeckServiceServer(grpcServer, global_deck_server.NewGlobalDeckServiceServer(globalDeckUseCases, tokenService))
 	user_deck_progress_service_server.RegisterUserDeckProgressServiceServer(grpcServer, user_deck_progress_server.NewUserDeckProgressServiceServerServiceServer(userDeckProgressUseCases, tokenService))
 	user_progress_card_service_server.RegisterUserProgressCardServiceServer(grpcServer, user_progress_card_server.NewUserProgressCardServiceServer(userProgressCardUseCases, tokenService))
-	log.Println("gRPC server listening on :50051")
+	slog.Info("Сервер запущен", "port", 50051)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		slog.Error("failed to start server", slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 }
