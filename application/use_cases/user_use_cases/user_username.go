@@ -6,7 +6,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"go_server/application/use_cases"
 	"go_server/domain/validation"
-	"log"
+	"log/slog"
 )
 
 func (u *UserUseCases) CheckUserNameAvailability(ctx context.Context, userName string) (bool, error) {
@@ -18,7 +18,7 @@ func (u *UserUseCases) CheckUserNameAvailability(ctx context.Context, userName s
 		if errors.Is(err, pgx.ErrNoRows) {
 			return true, nil
 		}
-		log.Println(err.Error()) // ← это должно точно появиться
+		slog.Error("Failed checking username availability, db error", "userName", userName, "err", err)
 		return false, use_cases.ErrDBFailure(err)
 	}
 

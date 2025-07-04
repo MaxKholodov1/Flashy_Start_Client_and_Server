@@ -6,13 +6,19 @@ import (
 	"go_server/domain/entities"
 	"go_server/domain/repositories"
 	"go_server/infrastructure/models"
+	"log/slog"
 	"time"
 )
 
 func CreateUserDeckProgressIfNotExist(ctx context.Context, userDeckProgressRepo repositories.UserDeckProgressRepository, globalDeckRepo repositories.GlobalDeckRepository, userID int, deckID int) (*entities.UserDeckProgress, error) {
 	progress, err := userDeckProgressRepo.GetByUserIDAndDeckID(ctx, userID, deckID)
+	if err != nil {
+		slog.Error("Failed getting progress deck", "deckID", deckID, "userID", userID, "err", err)
+		return nil, use_cases.ErrDBFailure(err)
+	}
 	deck, err := globalDeckRepo.GetByID(deckID)
 	if err != nil {
+		slog.Error("Failed getting deck", "deckID", deckID, "err", err)
 		return nil, use_cases.ErrDBFailure(err)
 	}
 	if progress == nil {
@@ -26,6 +32,7 @@ func CreateUserDeckProgressIfNotExist(ctx context.Context, userDeckProgressRepo 
 		}
 		_, err := userDeckProgressRepo.Create(ctx, &models.UserDeckProgressRecord{UserID: userID, DeckID: deckID, Score: 0, LastReviewedAt: time.Time{}})
 		if err != nil {
+			slog.Error("Failed creating user deck progress", "deckID", deckID, "userID", userID, "err", err)
 			return nil, use_cases.ErrDBFailure(err)
 		}
 		return newProgress, nil

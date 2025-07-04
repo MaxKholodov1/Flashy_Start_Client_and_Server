@@ -6,7 +6,7 @@ import (
 	"go_server/domain/entities"
 	"go_server/domain/validation"
 	"golang.org/x/crypto/bcrypt"
-	"log"
+	"log/slog"
 )
 
 func (u *UserUseCases) CreateUser(ctx context.Context, user *entities.User) (int, error) {
@@ -32,13 +32,13 @@ func (u *UserUseCases) CreateUser(ctx context.Context, user *entities.User) (int
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.PasswordHash), bcrypt.DefaultCost)
 	if err != nil {
+		slog.Error("Failed hashing password", "err", err)
 		return 0, use_cases.ErrFailedToGeneratePasswordHash
 	}
 	user.PasswordHash = string(hashedPassword)
-	log.Println("DEBUG: before create repo") // ← это должно точно появиться
-	log.Printf("DEBUG: userRepo = %#v", u.userRepository)
 	id, err := u.userRepository.Create(user)
 	if err != nil {
+		slog.Error("Failed creating user", "err", err)
 		return 0, use_cases.ErrDBFailure(err)
 	}
 
