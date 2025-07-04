@@ -19,6 +19,12 @@ func (u *GlobalCardUseCases) UpdateGlobalCard(ctx context.Context, cardID, versi
 		slog.Error("Failed to parse access token", "err", err)
 		return nil, nil, use_cases.ErrAccessTokenInvalid
 	}
+	if question == "" {
+		return nil, nil, use_cases.ErrInvalidQuestionOfTheCard
+	}
+	if answer == "" {
+		return nil, nil, use_cases.ErrInvalidAnswerOfTheCard
+	}
 	var currentCard *entities.GlobalCard
 	currentCard, err = u.globalCardRepository.GetGlobalCardByID(cardID)
 	if err != nil {
