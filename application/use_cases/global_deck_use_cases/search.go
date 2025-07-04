@@ -4,21 +4,25 @@ import (
 	"context"
 	"go_server/application/use_cases"
 	"go_server/domain/entities"
+	"log/slog"
 )
 
 func (u *GlobalDeckUseCases) SearchGlobalDecks(ctx context.Context, query, accessToken string, limit, offset int) ([]entities.SearchResultDeck, bool, error) {
 	userID, err := u.tokenService.ParseAccessToken(accessToken)
 	if err != nil {
+		slog.Error("failed to parse access token", "err", err)
 		return nil, false, use_cases.ErrAccessTokenInvalid
 	}
 
 	decks, hasMore, err := u.globalDeckRepository.SearchByTitleOffset(query, limit, offset)
 	if err != nil {
+		slog.Error("failed to search by title", "query", query, "limit", limit, "offset", offset, "err", err)
 		return nil, false, use_cases.ErrDBFailure(err)
 	}
 
 	permissions, err := u.deckPermissionRepository.GetDeckPermissionsByUserID(ctx, userID)
 	if err != nil {
+		slog.Error("failed to get deck permissions by userID", "userID", userID, "err", err)
 		return nil, false, use_cases.ErrDBFailure(err)
 	}
 

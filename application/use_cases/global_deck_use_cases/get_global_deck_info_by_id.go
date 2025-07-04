@@ -4,29 +4,35 @@ import (
 	"context"
 	"go_server/application/use_cases"
 	"go_server/domain/entities"
+	"log/slog"
 )
 
 func (u *GlobalDeckUseCases) GetGlobalDeckInfoByID(ctx context.Context, deckID int) (*entities.GlobalDeck, *string, []string, error) {
 	accessToken, err := u.tokenService.GetTokenFromMetadata(ctx)
 	if err != nil {
+		slog.Error("Failed to get access token", "err", err)
 		return nil, nil, nil, use_cases.ErrAccessTokenInvalid
 	}
 	userID, err := u.tokenService.ParseAccessToken(accessToken)
 	if err != nil {
+		slog.Error("Failed to parse access token", "err", err)
 		return nil, nil, nil, use_cases.ErrAccessTokenInvalid
 	}
 	deck, ok := u.globalDeckRepository.GetByID(deckID)
 	if ok != nil {
+		slog.Error("Failed to get global deck", "deckID", deckID, "userID", userID)
 		return nil, nil, nil, use_cases.ErrDBFailure(err)
 	}
-	var authorID int = deck.AuthorID
+	var authorID = deck.AuthorID
 	author, err := u.userRepository.GetByID(authorID)
 	if err != nil {
+		slog.Error("Failed to get author", "authorID", authorID)
 		return nil, nil, nil, use_cases.ErrDBFailure(err)
 	}
 	var permissions []*entities.DeckPermission
 	permissions, err = u.deckPermissionRepository.GetDeckPermissionsByDeckID(ctx, deckID)
 	if err != nil {
+		slog.Error("Failed to get permissions", "deckID", deckID, "userID", userID)
 		return nil, nil, nil, use_cases.ErrDBFailure(err)
 	}
 	var isEditor = false
@@ -38,12 +44,14 @@ func (u *GlobalDeckUseCases) GetGlobalDeckInfoByID(ctx context.Context, deckID i
 				isEditor = true
 			}
 			if err != nil {
+				slog.Error("Failed to get editor", "userID", permission.UserID, "err", err)
 				return nil, nil, nil, use_cases.ErrDBFailure(err)
 			}
 			editorNames = append(editorNames, editor.UserName)
 		}
 	}
 	if deck.IsPublic == false && authorID != userID && isEditor == false {
+		slog.Error("Deck permission denied")
 		return nil, nil, nil, use_cases.ErrDeckPermissionDenied
 	}
 	return deck, &author.UserName, editorNames, nil
