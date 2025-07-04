@@ -12,10 +12,6 @@ import (
 
 func CreateUserDeckProgressIfNotExist(ctx context.Context, userDeckProgressRepo repositories.UserDeckProgressRepository, globalDeckRepo repositories.GlobalDeckRepository, userID int, deckID int) (*entities.UserDeckProgress, error) {
 	progress, err := userDeckProgressRepo.GetByUserIDAndDeckID(ctx, userID, deckID)
-	if err != nil {
-		slog.Error("Failed getting progress deck", "deckID", deckID, "userID", userID, "err", err)
-		return nil, use_cases.ErrDBFailure(err)
-	}
 	deck, err := globalDeckRepo.GetByID(deckID)
 	if err != nil {
 		slog.Error("Failed getting deck", "deckID", deckID, "err", err)
