@@ -2,7 +2,7 @@ package interceptors
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"time"
 
 	"google.golang.org/grpc"
@@ -10,22 +10,37 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func RecoveryAndLoggingUnaryInterceptor(
-	ctx context.Context,
-	req interface{},
-	info *grpc.UnaryServerInfo,
-	handler grpc.UnaryHandler,
-) (resp interface{}, err error) {
-	start := time.Now()
+func RecoveryAndLoggingUnaryInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
+	return func(
+		ctx context.Context,
+		req interface{},
+		info *grpc.UnaryServerInfo,
+		handler grpc.UnaryHandler,
+	) (resp interface{}, err error) {
+		start := time.Now()
 
-	defer func() {
-		if r := recover(); r != nil {
-			log.Printf("[PANIC RECOVERED] method=%s panic=%v", info.FullMethod, r)
-			err = status.Error(codes.Internal, "internal server error")
-		}
-		log.Printf("[gRPC] method=%s duration=%s err=%v", info.FullMethod, time.Since(start), err)
-	}()
+		defer func() {
+			if r := recover(); r != nil {
+				logger.Error("panic recovered",
+					slog.String("method", info.FullMethod),
+					slog.Any("panic", r),
+				)
+				err = status.Error(codes.Internal, "internal server error")
+			}
 
-	resp, err = handler(ctx, req)
-	return
+			level := slog.LevelInfo
+			if err != nil {
+				level = slog.LevelError
+			}
+
+			logger.Log(ctx, level, "gRPC request",
+				slog.String("method", info.FullMethod),
+				slog.Duration("duration", time.Since(start)),
+				slog.Any("error", err),
+			)
+		}()
+
+		resp, err = handler(ctx, req)
+		return
+	}
 }

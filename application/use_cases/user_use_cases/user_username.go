@@ -13,7 +13,6 @@ func (u *UserUseCases) CheckUserNameAvailability(ctx context.Context, userName s
 	if err := validation.ValidateUsername(userName); err != nil {
 		return false, err
 	}
-	log.Println("DEBUG: before create repo") // ← это должно точно появиться
 	_, err := u.userRepository.GetByUserName(userName)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {

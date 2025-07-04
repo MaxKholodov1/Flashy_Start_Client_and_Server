@@ -52,14 +52,19 @@ func main() {
 
 	err = godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		slog.Error("Error loading .env file")
+		os.Exit(1)
 	}
 
 	accessTTL, err := time.ParseDuration(os.Getenv("ACCESS_TOKEN_TTL"))
 	if err != nil {
+		slog.Error("Error loading .env file")
+		os.Exit(1)
 	}
 	refreshTTL, err := time.ParseDuration(os.Getenv("REFRESH_TOKEN_TTL"))
 	if err != nil {
+		slog.Error("Error loading .env file")
+		os.Exit(1)
 	}
 
 	secretKey := os.Getenv("JWT_ACCESS_SECRET")
@@ -71,7 +76,8 @@ func main() {
 	dsn := os.Getenv("DSN")
 	dbpool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
-		log.Fatalf("unable to connect to db: %v", err)
+		slog.Error("unable to connect to db: %v", err)
+		os.Exit(1)
 	}
 	defer dbpool.Close()
 
@@ -90,11 +96,12 @@ func main() {
 	userDeckProgressUseCases := user_deck_progress_use_cases.NewUserDeckProgressUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo)
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		slog.Error("failed to listen: %v", err)
+		os.Exit(1)
 	}
 
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(interceptors.RecoveryAndLoggingUnaryInterceptor),
+		grpc.UnaryInterceptor(interceptors.RecoveryAndLoggingUnaryInterceptor(logger)),
 	)
 	global_card_service_server.RegisterGlobalCardServiceServer(grpcServer, global_card_server.NewGlobalCardServiceServer(tokenService, globalCardUseCase))
 	user_service_server.RegisterUserServiceServer(grpcServer, user_server.NewUserServiceServer(userUseCases, tokenService))
