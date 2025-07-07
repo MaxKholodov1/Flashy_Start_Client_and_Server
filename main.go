@@ -23,6 +23,7 @@ import (
 	user_progress_card_server "go_server/interfaces/grpc_interfaces/user_progress_card_service_server"
 	user_server "go_server/interfaces/grpc_interfaces/user_server"
 	validation_server "go_server/interfaces/grpc_interfaces/validation_service_server"
+	"google.golang.org/grpc/credentials"
 	"log"
 	"log/slog"
 	"net"
@@ -100,7 +101,16 @@ func main() {
 		os.Exit(1)
 	}
 
+	certFile := "/etc/letsencrypt/live/flashystart.com/fullchain.pem"
+	keyFile := "/etc/letsencrypt/live/flashystart.com/privkey.pem"
+
+	creds, err := credentials.NewServerTLSFromFile(certFile, keyFile)
+	if err != nil {
+		log.Fatalf("failed to load TLS credentials: %v", err)
+	}
+
 	grpcServer := grpc.NewServer(
+		grpc.Creds(creds),
 		grpc.UnaryInterceptor(interceptors.RecoveryAndLoggingUnaryInterceptor(logger)),
 	)
 	global_card_service_server.RegisterGlobalCardServiceServer(grpcServer, global_card_server.NewGlobalCardServiceServer(tokenService, globalCardUseCase))
