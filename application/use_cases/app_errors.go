@@ -38,6 +38,7 @@ var (
 	ErrSuchPermissionAlreadyExists     = errors.New("such permission already exists")
 	ErrAuthorCantDeleteProgressDeck    = errors.New("author can't delete progress deck")
 	ErrPermissionNotFound              = errors.New("permission not found")
+	ErrFailedToSendEmail               = errors.New("failed to send email")
 )
 
 func ErrDBFailure(err error) error {

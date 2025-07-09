@@ -24,9 +24,18 @@ message CreateUserRequest {
 
 message CreateUserResponse {
   bool is_success = 1;
+  int32 userID = 2;
+}
+
+message VerifyEmailRequest {
+  int32 user_id = 1;
+  string code = 2;
+}
+
+message VerifyEmailResponse {
+  bool is_success = 1;
   string access_token = 2;
   string refresh_token = 3;
-  int32 userID = 4;
 }
 
 message GetUserRequest {

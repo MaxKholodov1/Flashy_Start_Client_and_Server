@@ -8,6 +8,7 @@ import (
 	"go_server/application/use_cases/user_deck_progress_use_cases"
 	"go_server/application/use_cases/user_progress_card_use_cases"
 	"go_server/application/use_cases/user_use_cases"
+	"go_server/infrastructure"
 	global_card_service_server "go_server/infrastructure/grpc_infr/global_card"
 	global_deck_service_server "go_server/infrastructure/grpc_infr/global_deck"
 	auth_service_server "go_server/infrastructure/grpc_infr/user/auth"
@@ -82,16 +83,25 @@ func main() {
 	}
 	defer dbpool.Close()
 
+	var smtpSender = infrastructure.NewSmtpEmailSender(
+		"smtp.elasticemail.com",    // SMTP сервер
+		587,                        // Порт (обычно 587 или 2525)
+		"no-reply@flashystart.com", // Username (почта)
+		"31A0C2A6XXXXXX",           // Пароль = API Key из Elastic Email
+		"no-reply@flashystart.com", // FromEmail (почта отправителя)
+	)
+
 	userRepo := repositories.NewPostgresUserRepository(dbpool)
 	globalDeckRepo := repositories.NewPostgresGlobalDeckRepository(dbpool)
 	deckPermissionRepo := repositories.NewDeckPermissionRepository(dbpool)
 	globalCardRepo := repositories.NewPostgresGlobalCardRepository(dbpool)
 	userDeckProgressRepo := repositories.NewPostgresUserDeckProgressRepository(dbpool)
 	userProgressCardRepo := repositories.NewPostgresUserProgressCardRepository(dbpool)
+	emailVerificationRepo := repositories.NewPostgresEmailVerificationRepository(dbpool)
 
 	tokenService := token_services.NewTokenService(secretKey, refreshKey, accessTTL, refreshTTL)
 	globalDeckUseCases := global_deck_use_cases.NewGlobalDeckUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userRepo)
-	userUseCases := user_use_cases.NewUserService(userRepo)
+	userUseCases := user_use_cases.NewUserService(userRepo, emailVerificationRepo, smtpSender)
 	userProgressCardUseCases := user_progress_card_use_cases.NewUserProgressCardUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo, globalCardRepo)
 	globalCardUseCase := global_card_use_cases.NewGlobalCardUseCases(dbpool, globalCardRepo, deckPermissionRepo, tokenService, userRepo, globalDeckRepo)
 	userDeckProgressUseCases := user_deck_progress_use_cases.NewUserDeckProgressUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo)

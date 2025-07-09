@@ -7,6 +7,7 @@ import (
 	"go_server/domain/validation"
 	"golang.org/x/crypto/bcrypt"
 	"log/slog"
+	"time"
 )
 
 func (u *UserUseCases) CreateUser(ctx context.Context, user *entities.User) (int, error) {
@@ -41,6 +42,24 @@ func (u *UserUseCases) CreateUser(ctx context.Context, user *entities.User) (int
 		slog.Error("Failed creating user", "err", err)
 		return 0, use_cases.ErrDBFailure(err)
 	}
+	// Генерация кода подтверждения (6 цифр)
+	code := use_cases.GenerateVerificationCode()
 
+	// Сохраняем код
+	verification := &entities.EmailVerification{
+		UserID:    id,
+		Code:      code,
+		ExpiresAt: time.Now().Add(15 * time.Minute),
+	}
+	if err := u.emailVerificationRepository.Upsert(ctx, verification); err != nil {
+		slog.Error("Failed to save email verification", "err", err)
+		return 0, use_cases.ErrFailedToSendEmail
+	}
+
+	// Отправка email
+	if err := u.emailSender.SendVerificationCode(user.Email, code); err != nil {
+		slog.Error("Failed to send verification email", "err", err)
+		return 0, use_cases.ErrFailedToSendEmail
+	}
 	return id, nil
 }
