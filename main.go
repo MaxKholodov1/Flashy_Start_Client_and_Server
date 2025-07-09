@@ -105,7 +105,7 @@ func main() {
 	userProgressCardUseCases := user_progress_card_use_cases.NewUserProgressCardUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo, globalCardRepo)
 	globalCardUseCase := global_card_use_cases.NewGlobalCardUseCases(dbpool, globalCardRepo, deckPermissionRepo, tokenService, userRepo, globalDeckRepo)
 	userDeckProgressUseCases := user_deck_progress_use_cases.NewUserDeckProgressUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo)
-	lis, err := net.Listen("tcp", ":443")
+	lis, err := net.Listen("tcp", ":8443")
 	if err != nil {
 		slog.Error("failed to listen: %v", err)
 		os.Exit(1)
@@ -130,7 +130,7 @@ func main() {
 	global_deck_service_server.RegisterGlobalDeckServiceServer(grpcServer, global_deck_server.NewGlobalDeckServiceServer(globalDeckUseCases, tokenService))
 	user_deck_progress_service_server.RegisterUserDeckProgressServiceServer(grpcServer, user_deck_progress_server.NewUserDeckProgressServiceServerServiceServer(userDeckProgressUseCases, tokenService))
 	user_progress_card_service_server.RegisterUserProgressCardServiceServer(grpcServer, user_progress_card_server.NewUserProgressCardServiceServer(userProgressCardUseCases, tokenService))
-	slog.Info("Сервер запущен", "port", 443)
+	slog.Info("Сервер запущен", "port", 8443)
 	if err := grpcServer.Serve(lis); err != nil {
 		slog.Error("failed to start server", slog.String("error", err.Error()))
 		os.Exit(1)
