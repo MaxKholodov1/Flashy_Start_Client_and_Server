@@ -10,12 +10,11 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *auth.LoginRequest) (
 	userr, isCorrect, isVerified, err := s.userUseCases.Login(ctx, req.Identifier, req.Password)
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(err)
-	}
-	if !isCorrect || !isVerified {
+	} // эта штука возвращает либо isCorrect true либо err
+	if !isVerified {
 		return &auth.LoginResponse{
-			IsPasswordCorrect: isCorrect,
-			IsVerified:        isVerified,
-			UserID:            userr.ID,
+			IsVerified: isVerified,
+			UserID:     userr.ID,
 		}, nil
 	}
 	accessToken, err := s.tokenService.GenerateAccessToken(int(userr.ID))
