@@ -1,6 +1,9 @@
 package repositories
 
-import "go_server/domain/entities"
+import (
+	"context"
+	"go_server/domain/entities"
+)
 
 type UserRepository interface {
 	Create(user *entities.User) (int, error)
@@ -8,4 +11,5 @@ type UserRepository interface {
 	GetByUserName(userName string) (*entities.User, error)
 	GetByEmail(email string) (*entities.User, error)
 	Update(user *entities.User) error
+	MarkEmailVerified(ctx context.Context, userID int) error
 }

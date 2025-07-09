@@ -442,11 +442,12 @@ const file_proto_user_proto_rawDesc = "" +
 	"\tuser_name\x18\x01 \x01(\tR\buserName\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xa6\x01\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xfa\x01\n" +
 	"\vUserService\x12O\n" +
 	"\n" +
 	"CreateUser\x12\x1f.user.service.CreateUserRequest\x1a .user.service.CreateUserResponse\x12F\n" +
-	"\aGetUser\x12\x1c.user.service.GetUserRequest\x1a\x1d.user.service.GetUserResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
+	"\aGetUser\x12\x1c.user.service.GetUserRequest\x1a\x1d.user.service.GetUserResponse\x12R\n" +
+	"\vVerifyEmail\x12 .user.service.VerifyEmailRequest\x1a!.user.service.VerifyEmailResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
 
 var (
 	file_proto_user_proto_rawDescOnce sync.Once
@@ -476,10 +477,12 @@ var file_proto_user_proto_depIdxs = []int32{
 	7, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
 	1, // 2: user.service.UserService.CreateUser:input_type -> user.service.CreateUserRequest
 	5, // 3: user.service.UserService.GetUser:input_type -> user.service.GetUserRequest
-	2, // 4: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
-	6, // 5: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
+	3, // 4: user.service.UserService.VerifyEmail:input_type -> user.service.VerifyEmailRequest
+	2, // 5: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
+	6, // 6: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
+	4, // 7: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name

@@ -9,6 +9,7 @@ option go_package = "infrastructure/grpc_infr/user/user;user";
 service UserService {
   rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
+  rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse);
 }
 message User {
   string userName = 1;

@@ -1,7 +1,6 @@
 package infrastructure
 
 import (
-	"crypto/tls"
 	"fmt"
 	"net/smtp"
 	"strings"
@@ -10,9 +9,9 @@ import (
 type SmtpEmailSender struct {
 	SMTPHost  string
 	SMTPPort  int
-	Username  string // полный email, например no-reply@flashystart.com
-	Password  string // пароль от ящика или App Password
-	FromEmail string // тоже no-reply@flashystart.com
+	Username  string // полный email
+	Password  string // пароль или app password
+	FromEmail string // email отправителя
 }
 
 func NewSmtpEmailSender(host string, port int, username, password, from string) *SmtpEmailSender {
@@ -41,46 +40,7 @@ func (s *SmtpEmailSender) SendVerificationCode(toEmail, code string) error {
 
 	addr := fmt.Sprintf("%s:%d", s.SMTPHost, s.SMTPPort)
 
-	// Подключаемся к серверу SMTP с TLS (STARTTLS через 587)
-	conn, err := tls.Dial("tcp", addr, &tls.Config{
-		ServerName: s.SMTPHost,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to dial SMTP server: %w", err)
-	}
-	defer conn.Close()
-
-	client, err := smtp.NewClient(conn, s.SMTPHost)
-	if err != nil {
-		return fmt.Errorf("failed to create SMTP client: %w", err)
-	}
-	defer client.Close()
-
-	// Аутентификация
 	auth := smtp.PlainAuth("", s.Username, s.Password, s.SMTPHost)
-	if err := client.Auth(auth); err != nil {
-		return fmt.Errorf("SMTP auth failed: %w", err)
-	}
 
-	// Отправка письма
-	if err := client.Mail(s.FromEmail); err != nil {
-		return fmt.Errorf("MAIL FROM failed: %w", err)
-	}
-	if err := client.Rcpt(toEmail); err != nil {
-		return fmt.Errorf("RCPT TO failed: %w", err)
-	}
-
-	writer, err := client.Data()
-	if err != nil {
-		return fmt.Errorf("DATA start failed: %w", err)
-	}
-	_, err = writer.Write([]byte(msg))
-	if err != nil {
-		return fmt.Errorf("write failed: %w", err)
-	}
-	if err := writer.Close(); err != nil {
-		return fmt.Errorf("DATA close failed: %w", err)
-	}
-
-	return client.Quit()
+	return smtp.SendMail(addr, auth, s.FromEmail, []string{toEmail}, []byte(msg))
 }

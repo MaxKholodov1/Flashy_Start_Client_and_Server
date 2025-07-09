@@ -111,3 +111,12 @@ func (r *PostgresUserRepository) Update(user *entities.User) error {
 	)
 	return err
 }
+
+func (r *PostgresUserRepository) MarkEmailVerified(ctx context.Context, userID int) error {
+	query := `
+		UPDATE users
+		SET is_verified = true
+		WHERE id = $1`
+	_, err := r.db.Exec(ctx, query, userID)
+	return err
+}
