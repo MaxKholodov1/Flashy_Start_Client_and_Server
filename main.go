@@ -85,9 +85,9 @@ func main() {
 
 	var smtpSender = infrastructure.NewSmtpEmailSender(
 		"smtp.elasticemail.com",    // SMTP сервер
-		587,                        // Порт (обычно 587 или 2525)
+		2525,                       // Порт (обычно 587 или 2525)
 		"no-reply@flashystart.com", // Username (почта)
-		"31A0C2A6XXXXXX",           // Пароль = API Key из Elastic Email
+		"C8E1581F3BC56C556BD08EDF39C84BCB324CBFAEC3E4E921CAC97897BE4B7BB899076C01F58B3BAC5C13E2FD262F834C", // Пароль = API Key из Elastic Email
 		"no-reply@flashystart.com", // FromEmail (почта отправителя)
 	)
 
