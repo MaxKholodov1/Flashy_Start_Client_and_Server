@@ -84,11 +84,11 @@ func main() {
 	defer dbpool.Close()
 
 	smtpSender := infrastructure.NewSmtpEmailSender(
-		"smtp.zoho.eu", // или smtp.zoho.com, если ты не из Европы
-		587,
-		"maxim@flashystart.com", // логин
-		"135790Max.",            // пароль
-		"maxim@flashystart.com", // от кого
+		"smtp.yandex.ru", // или smtp.zoho.com, если ты не из Европы
+		465,
+		"maxi.kholodov@yandex.com", // логин
+		"btutxvoagnrmvbwx",         // пароль
+		"maxi.kholodov@yandex.com", // от кого
 	)
 
 	userRepo := repositories.NewPostgresUserRepository(dbpool)
