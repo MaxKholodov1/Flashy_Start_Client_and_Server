@@ -11,6 +11,13 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *auth.LoginRequest) (
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(err)
 	}
+	if !isCorrect || !isVerified {
+		return &auth.LoginResponse{
+			IsPasswordCorrect: isCorrect,
+			IsVerified:        isVerified,
+			UserID:            userr.ID,
+		}, nil
+	}
 	accessToken, err := s.tokenService.GenerateAccessToken(int(userr.ID))
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
