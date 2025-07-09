@@ -1,17 +1,18 @@
 package infrastructure
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/smtp"
 	"strings"
 )
 
 type SmtpEmailSender struct {
-	SMTPHost  string
-	SMTPPort  int
-	Username  string // полный email
+	SMTPHost  string // например, smtp.yandex.ru
+	SMTPPort  int    // 465
+	Username  string // полный email: your@yandex.ru
 	Password  string // пароль или app password
-	FromEmail string // email отправителя
+	FromEmail string // обычно тот же email
 }
 
 func NewSmtpEmailSender(host string, port int, username, password, from string) *SmtpEmailSender {
@@ -40,7 +41,48 @@ func (s *SmtpEmailSender) SendVerificationCode(toEmail, code string) error {
 
 	addr := fmt.Sprintf("%s:%d", s.SMTPHost, s.SMTPPort)
 
-	auth := smtp.PlainAuth("", s.Username, s.Password, s.SMTPHost)
+	// TLS-соединение с сервером
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: false,
+		ServerName:         s.SMTPHost,
+	}
 
-	return smtp.SendMail(addr, auth, s.FromEmail, []string{toEmail}, []byte(msg))
+	conn, err := tls.Dial("tcp", addr, tlsConfig)
+	if err != nil {
+		return fmt.Errorf("tls dial failed: %w", err)
+	}
+	defer conn.Close()
+
+	client, err := smtp.NewClient(conn, s.SMTPHost)
+	if err != nil {
+		return fmt.Errorf("smtp client creation failed: %w", err)
+	}
+	defer client.Close()
+
+	// Аутентификация
+	auth := smtp.PlainAuth("", s.Username, s.Password, s.SMTPHost)
+	if err := client.Auth(auth); err != nil {
+		return fmt.Errorf("smtp auth failed: %w", err)
+	}
+
+	if err := client.Mail(s.FromEmail); err != nil {
+		return fmt.Errorf("MAIL FROM failed: %w", err)
+	}
+	if err := client.Rcpt(toEmail); err != nil {
+		return fmt.Errorf("RCPT TO failed: %w", err)
+	}
+
+	writer, err := client.Data()
+	if err != nil {
+		return fmt.Errorf("DATA command failed: %w", err)
+	}
+	_, err = writer.Write([]byte(msg))
+	if err != nil {
+		return fmt.Errorf("message write failed: %w", err)
+	}
+	if err := writer.Close(); err != nil {
+		return fmt.Errorf("DATA close failed: %w", err)
+	}
+
+	return client.Quit()
 }
