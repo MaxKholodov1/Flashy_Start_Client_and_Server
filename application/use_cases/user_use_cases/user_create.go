@@ -49,17 +49,16 @@ func (u *UserUseCases) CreateUser(ctx context.Context, user *entities.User) (int
 	verification := &entities.EmailVerification{
 		UserID:    id,
 		Code:      code,
-		ExpiresAt: time.Now().Add(15 * time.Minute),
+		ExpiresAt: time.Now().UTC().Add(15 * time.Minute),
 	}
 	if err := u.emailVerificationRepository.Upsert(ctx, verification); err != nil {
 		slog.Error("Failed to save email verification", "err", err)
-		return 0, use_cases.ErrFailedToSendEmail
+		return 0, use_cases.ErrVerificationError
 	}
-	slog.Info("Email verification saved, now trying to send email verification")
 	// Отправка email
 	if err := u.emailSender.SendVerificationCode(user.Email, code); err != nil {
 		slog.Error("Failed to send verification email", "err", err)
-		return 0, use_cases.ErrFailedToSendEmail
+		return 0, use_cases.ErrVerificationError
 	}
 	return id, nil
 }

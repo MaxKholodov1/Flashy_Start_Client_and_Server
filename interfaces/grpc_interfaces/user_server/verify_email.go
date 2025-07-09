@@ -12,7 +12,22 @@ func (s *UserServiceServer) VerifyEmail(ctx context.Context, req *user.VerifyEma
 			IsSuccess: false,
 		}, err
 	}
+	refreshToken, err := s.tokenService.GenerateRefreshToken(int(req.UserId))
+	if err != nil {
+		return &user.VerifyEmailResponse{
+			IsSuccess: false,
+		}, err
+	}
+	accessToken, err := s.tokenService.GenerateAccessToken(int(req.UserId))
+	if err != nil {
+		return &user.VerifyEmailResponse{
+			IsSuccess: false,
+		}, err
+	}
+
 	return &user.VerifyEmailResponse{
-		IsSuccess: isSuccess,
+		IsSuccess:    isSuccess,
+		RefreshToken: refreshToken,
+		AccessToken:  accessToken,
 	}, nil
 }

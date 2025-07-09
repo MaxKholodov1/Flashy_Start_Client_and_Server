@@ -39,6 +39,7 @@ var (
 	ErrAuthorCantDeleteProgressDeck    = errors.New("author can't delete progress deck")
 	ErrPermissionNotFound              = errors.New("permission not found")
 	ErrFailedToSendEmail               = errors.New("failed to send email")
+	ErrVerificationError               = errors.New("verification error")
 )
 
 func ErrDBFailure(err error) error {
