@@ -39,7 +39,7 @@ func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (
 		return nil, false, false, use_cases.ErrDBFailure(err)
 	}
 	if isVerified == false {
-		return nil, true, false, nil
+		return user, true, false, nil
 	}
 	return user, true, true, nil
 }
