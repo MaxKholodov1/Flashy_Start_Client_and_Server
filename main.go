@@ -87,7 +87,7 @@ func main() {
 		"smtp.zoho.eu", // или smtp.zoho.com, если ты не из Европы
 		587,
 		"maxim@flashystart.com", // логин
-		"135790Max",             // пароль
+		"135790Max.",            // пароль
 		"maxim@flashystart.com", // от кого
 	)
 
