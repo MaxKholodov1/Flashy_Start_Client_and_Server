@@ -35,6 +35,7 @@ func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (
 	}
 	isVerified, err := u.userRepository.IsEmailVerified(ctx, int(user.ID))
 	if err != nil {
+		slog.Error("Failed checking if email verified", "identifier", identifier, "err", err)
 		return nil, false, false, use_cases.ErrDBFailure(err)
 	}
 	if isVerified == false {
