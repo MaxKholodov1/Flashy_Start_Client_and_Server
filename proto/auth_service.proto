@@ -18,7 +18,8 @@ message LoginResponse {
   bool is_password_correct = 1;
   string access_token = 2;
   string refresh_token = 3;
-  int32 user_iD = 4;
+  bool is_verified = 4;
+  int32 user_iD = 5;
 }
 
 message RefreshTokenRequest {

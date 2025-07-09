@@ -7,7 +7,7 @@ import (
 )
 
 func (s *AuthServiceServer) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
-	userr, isCorrect, err := s.userUseCases.Login(ctx, req.Identifier, req.Password)
+	userr, isCorrect, isVerified, err := s.userUseCases.Login(ctx, req.Identifier, req.Password)
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(err)
 	}
@@ -23,6 +23,7 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *auth.LoginRequest) (
 		IsPasswordCorrect: isCorrect,
 		AccessToken:       accessToken,
 		RefreshToken:      refreshToken,
+		IsVerified:        isVerified,
 		UserID:            userr.ID,
 	}, nil
 }

@@ -12,4 +12,5 @@ type UserRepository interface {
 	GetByEmail(email string) (*entities.User, error)
 	Update(user *entities.User) error
 	MarkEmailVerified(ctx context.Context, userID int) error
+	IsEmailVerified(ctx context.Context, userID int) (bool, error)
 }

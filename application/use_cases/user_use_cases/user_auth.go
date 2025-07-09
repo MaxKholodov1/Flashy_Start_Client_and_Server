@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (*entities.User, bool, error) {
+func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (*entities.User, bool, bool, error) {
 	var user *entities.User
 	var err error
 
@@ -23,16 +23,22 @@ func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (
 	}
 
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, false, use_cases.ErrUserNotFound
+		return nil, false, false, use_cases.ErrUserNotFound
 	} else if err != nil {
 		slog.Error("Failed getting user", "identifier", identifier, "err", err)
-		return nil, false, fmt.Errorf("failed to get user: %w", err)
+		return nil, false, false, fmt.Errorf("failed to get user: %w", err)
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
 		slog.Error("Failed comparing password", "identifier", identifier, "err", err)
-		return nil, false, use_cases.ErrIncorrectPassword
+		return nil, false, false, use_cases.ErrIncorrectPassword
 	}
-
-	return user, true, nil
+	isVerified, err := u.userRepository.IsEmailVerified(ctx, int(user.ID))
+	if err != nil {
+		return nil, false, false, use_cases.ErrUserNotFound
+	}
+	if isVerified == false {
+		return nil, true, false, use_cases.ErrUserNotFound
+	}
+	return user, true, true, nil
 }

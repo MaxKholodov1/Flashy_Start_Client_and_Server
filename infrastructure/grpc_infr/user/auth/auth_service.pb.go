@@ -78,7 +78,8 @@ type LoginResponse struct {
 	IsPasswordCorrect bool                   `protobuf:"varint,1,opt,name=is_password_correct,json=isPasswordCorrect,proto3" json:"is_password_correct,omitempty"`
 	AccessToken       string                 `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	RefreshToken      string                 `protobuf:"bytes,3,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	UserID            int32                  `protobuf:"varint,4,opt,name=user_iD,json=userID,proto3" json:"user_iD,omitempty"`
+	IsVerified        bool                   `protobuf:"varint,4,opt,name=is_verified,json=isVerified,proto3" json:"is_verified,omitempty"`
+	UserID            int32                  `protobuf:"varint,5,opt,name=user_iD,json=userID,proto3" json:"user_iD,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -132,6 +133,13 @@ func (x *LoginResponse) GetRefreshToken() string {
 		return x.RefreshToken
 	}
 	return ""
+}
+
+func (x *LoginResponse) GetIsVerified() bool {
+	if x != nil {
+		return x.IsVerified
+	}
+	return false
 }
 
 func (x *LoginResponse) GetUserID() int32 {
@@ -254,12 +262,14 @@ const file_proto_auth_service_proto_rawDesc = "" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
 	"identifier\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\xa0\x01\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\xc1\x01\n" +
 	"\rLoginResponse\x12.\n" +
 	"\x13is_password_correct\x18\x01 \x01(\bR\x11isPasswordCorrect\x12!\n" +
 	"\faccess_token\x18\x02 \x01(\tR\vaccessToken\x12#\n" +
-	"\rrefresh_token\x18\x03 \x01(\tR\frefreshToken\x12\x17\n" +
-	"\auser_iD\x18\x04 \x01(\x05R\x06userID\":\n" +
+	"\rrefresh_token\x18\x03 \x01(\tR\frefreshToken\x12\x1f\n" +
+	"\vis_verified\x18\x04 \x01(\bR\n" +
+	"isVerified\x12\x17\n" +
+	"\auser_iD\x18\x05 \x01(\x05R\x06userID\":\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"w\n" +
 	"\x14RefreshTokenResponse\x12!\n" +

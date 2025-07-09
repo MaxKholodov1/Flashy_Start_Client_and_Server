@@ -120,3 +120,12 @@ func (r *PostgresUserRepository) MarkEmailVerified(ctx context.Context, userID i
 	_, err := r.db.Exec(ctx, query, userID)
 	return err
 }
+func (r *PostgresUserRepository) IsEmailVerified(ctx context.Context, userID int) (bool, error) {
+	query := `SELECT is_verified FROM users WHERE id = $1`
+	var isVerified bool
+	err := r.db.QueryRow(ctx, query, userID).Scan(&isVerified)
+	if err != nil {
+		return false, err
+	}
+	return isVerified, nil
+}
