@@ -35,10 +35,10 @@ func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (
 	}
 	isVerified, err := u.userRepository.IsEmailVerified(ctx, int(user.ID))
 	if err != nil {
-		return nil, false, false, use_cases.ErrUserNotFound
+		return nil, false, false, use_cases.ErrDBFailure(err)
 	}
 	if isVerified == false {
-		return nil, true, false, use_cases.ErrUserNotFound
+		return nil, true, false, nil
 	}
 	return user, true, true, nil
 }
