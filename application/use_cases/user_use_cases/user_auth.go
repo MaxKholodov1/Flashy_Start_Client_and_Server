@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log/slog"
 	"strings"
+	"time"
 )
 
 func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (*entities.User, bool, bool, error) {
@@ -39,6 +40,21 @@ func (u *UserUseCases) Login(ctx context.Context, identifier, password string) (
 		return nil, false, false, use_cases.ErrDBFailure(err)
 	}
 	if isVerified == false {
+		// Генерация кода подтверждения (6 цифр)
+		code := use_cases.GenerateVerificationCode()
+		// Сохраняем код
+		verification := &entities.EmailVerification{
+			UserID:    int(user.ID),
+			Code:      code,
+			ExpiresAt: time.Now().UTC().Add(15 * time.Minute),
+		}
+		if err := u.emailVerificationRepository.Upsert(ctx, verification); err != nil {
+			slog.Error("Failed to save email verification", "err", err)
+		}
+		// Отправка email
+		if err := u.emailSender.SendVerificationCode(user.Email, code); err != nil {
+			slog.Error("Failed to send verification email", "err", err)
+		}
 		return user, true, false, nil
 	}
 	return user, true, true, nil
