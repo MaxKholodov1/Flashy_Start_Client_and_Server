@@ -10,6 +10,7 @@ service UserService {
   rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
   rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc SendVerificationCode (SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
 }
 message User {
   string userName = 1;
@@ -48,3 +49,10 @@ message GetUserResponse {
   string email = 2;
   google.protobuf.Timestamp created_at = 3;
 }
+message SendVerificationCodeRequest{
+  int32 user_id = 1;
+}
+message SendVerificationCodeResponse{
+  bool is_success = 1;
+}
+

@@ -410,6 +410,94 @@ func (x *GetUserResponse) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type SendVerificationCodeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        int32                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendVerificationCodeRequest) Reset() {
+	*x = SendVerificationCodeRequest{}
+	mi := &file_proto_user_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendVerificationCodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendVerificationCodeRequest) ProtoMessage() {}
+
+func (x *SendVerificationCodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendVerificationCodeRequest.ProtoReflect.Descriptor instead.
+func (*SendVerificationCodeRequest) Descriptor() ([]byte, []int) {
+	return file_proto_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SendVerificationCodeRequest) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type SendVerificationCodeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsSuccess     bool                   `protobuf:"varint,1,opt,name=is_success,json=isSuccess,proto3" json:"is_success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendVerificationCodeResponse) Reset() {
+	*x = SendVerificationCodeResponse{}
+	mi := &file_proto_user_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendVerificationCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendVerificationCodeResponse) ProtoMessage() {}
+
+func (x *SendVerificationCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendVerificationCodeResponse.ProtoReflect.Descriptor instead.
+func (*SendVerificationCodeResponse) Descriptor() ([]byte, []int) {
+	return file_proto_user_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SendVerificationCodeResponse) GetIsSuccess() bool {
+	if x != nil {
+		return x.IsSuccess
+	}
+	return false
+}
+
 var File_proto_user_proto protoreflect.FileDescriptor
 
 const file_proto_user_proto_rawDesc = "" +
@@ -442,12 +530,18 @@ const file_proto_user_proto_rawDesc = "" +
 	"\tuser_name\x18\x01 \x01(\tR\buserName\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt2\xfa\x01\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"6\n" +
+	"\x1bSendVerificationCodeRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x05R\x06userId\"=\n" +
+	"\x1cSendVerificationCodeResponse\x12\x1d\n" +
+	"\n" +
+	"is_success\x18\x01 \x01(\bR\tisSuccess2\xe9\x02\n" +
 	"\vUserService\x12O\n" +
 	"\n" +
 	"CreateUser\x12\x1f.user.service.CreateUserRequest\x1a .user.service.CreateUserResponse\x12F\n" +
 	"\aGetUser\x12\x1c.user.service.GetUserRequest\x1a\x1d.user.service.GetUserResponse\x12R\n" +
-	"\vVerifyEmail\x12 .user.service.VerifyEmailRequest\x1a!.user.service.VerifyEmailResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
+	"\vVerifyEmail\x12 .user.service.VerifyEmailRequest\x1a!.user.service.VerifyEmailResponse\x12m\n" +
+	"\x14SendVerificationCode\x12).user.service.SendVerificationCodeRequest\x1a*.user.service.SendVerificationCodeResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
 
 var (
 	file_proto_user_proto_rawDescOnce sync.Once
@@ -461,28 +555,32 @@ func file_proto_user_proto_rawDescGZIP() []byte {
 	return file_proto_user_proto_rawDescData
 }
 
-var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_user_proto_goTypes = []any{
-	(*User)(nil),                  // 0: user.service.User
-	(*CreateUserRequest)(nil),     // 1: user.service.CreateUserRequest
-	(*CreateUserResponse)(nil),    // 2: user.service.CreateUserResponse
-	(*VerifyEmailRequest)(nil),    // 3: user.service.VerifyEmailRequest
-	(*VerifyEmailResponse)(nil),   // 4: user.service.VerifyEmailResponse
-	(*GetUserRequest)(nil),        // 5: user.service.GetUserRequest
-	(*GetUserResponse)(nil),       // 6: user.service.GetUserResponse
-	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
+	(*User)(nil),                         // 0: user.service.User
+	(*CreateUserRequest)(nil),            // 1: user.service.CreateUserRequest
+	(*CreateUserResponse)(nil),           // 2: user.service.CreateUserResponse
+	(*VerifyEmailRequest)(nil),           // 3: user.service.VerifyEmailRequest
+	(*VerifyEmailResponse)(nil),          // 4: user.service.VerifyEmailResponse
+	(*GetUserRequest)(nil),               // 5: user.service.GetUserRequest
+	(*GetUserResponse)(nil),              // 6: user.service.GetUserResponse
+	(*SendVerificationCodeRequest)(nil),  // 7: user.service.SendVerificationCodeRequest
+	(*SendVerificationCodeResponse)(nil), // 8: user.service.SendVerificationCodeResponse
+	(*timestamppb.Timestamp)(nil),        // 9: google.protobuf.Timestamp
 }
 var file_proto_user_proto_depIdxs = []int32{
-	7, // 0: user.service.User.created_at:type_name -> google.protobuf.Timestamp
-	7, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	9, // 0: user.service.User.created_at:type_name -> google.protobuf.Timestamp
+	9, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
 	1, // 2: user.service.UserService.CreateUser:input_type -> user.service.CreateUserRequest
 	5, // 3: user.service.UserService.GetUser:input_type -> user.service.GetUserRequest
 	3, // 4: user.service.UserService.VerifyEmail:input_type -> user.service.VerifyEmailRequest
-	2, // 5: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
-	6, // 6: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
-	4, // 7: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
+	7, // 5: user.service.UserService.SendVerificationCode:input_type -> user.service.SendVerificationCodeRequest
+	2, // 6: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
+	6, // 7: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
+	4, // 8: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
+	8, // 9: user.service.UserService.SendVerificationCode:output_type -> user.service.SendVerificationCodeResponse
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -499,7 +597,7 @@ func file_proto_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_user_proto_rawDesc), len(file_proto_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
