@@ -8,7 +8,7 @@ import (
 )
 
 func (s *UserServiceServer) GetUser(ctx context.Context, req *user.GetUserRequest) (*user.GetUserResponse, error) {
-	userID, err := s.tokenService.ParseAccessToken(req.AccessToken)
+	userID, err := s.tokenService.ParseAccessToken(req.AccessToken, ctx)
 	if err != nil {
 		return nil, MapUserErrToGrpcErr(use_cases.ErrAccessTokenInvalid)
 	}

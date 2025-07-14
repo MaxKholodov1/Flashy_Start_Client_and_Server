@@ -14,7 +14,7 @@ func (u *GlobalCardUseCases) GetGlobalCardsByDeckID(ctx context.Context, deckID 
 		slog.Error("Failed to get token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed to parse token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid

@@ -8,18 +8,18 @@ import (
 
 func (s *AuthServiceServer) RefreshToken(ctx context.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
 	refreshToken := req.GetRefreshToken()
-	userID, err := s.tokenService.ParseRefreshToken(refreshToken)
+	userID, err := s.tokenService.ParseRefreshToken(refreshToken, ctx)
 
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(use_cases.ErrRefreshTokenInvalid)
 	}
 
-	newAccessToken, err := s.tokenService.GenerateAccessToken(userID)
+	newAccessToken, err := s.tokenService.GenerateAccessToken(userID, ctx)
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
 	}
 
-	newRefreshToken, err := s.tokenService.GenerateRefreshToken(userID)
+	newRefreshToken, err := s.tokenService.GenerateRefreshToken(userID, ctx)
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
 	}

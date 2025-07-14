@@ -17,7 +17,7 @@ func (u *UserProgressCardUseCases) SubmitProgressCardReview(ctx context.Context,
 		slog.Error("Failed getting token from metadata", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
 	}
-	_, err = u.tokenService.ParseAccessToken(accessToken)
+	_, err = u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed parsing access token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid

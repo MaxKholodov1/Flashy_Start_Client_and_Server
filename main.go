@@ -106,9 +106,9 @@ func main() {
 	userProgressCardRepo := repositories.NewPostgresUserProgressCardRepository(dbpool)
 	emailVerificationRepo := repositories.NewPostgresEmailVerificationRepository(dbpool)
 
-	tokenService := token_services.NewTokenService(secretKey, refreshKey, accessTTL, refreshTTL)
+	tokenService := token_services.NewTokenService(secretKey, refreshKey, accessTTL, refreshTTL, userRepo)
 	globalDeckUseCases := global_deck_use_cases.NewGlobalDeckUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userRepo)
-	userUseCases := user_use_cases.NewUserService(userRepo, emailVerificationRepo, smtpSender)
+	userUseCases := user_use_cases.NewUserService(userRepo, emailVerificationRepo, smtpSender, *tokenService)
 	userProgressCardUseCases := user_progress_card_use_cases.NewUserProgressCardUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo, globalCardRepo)
 	globalCardUseCase := global_card_use_cases.NewGlobalCardUseCases(dbpool, globalCardRepo, deckPermissionRepo, tokenService, userRepo, globalDeckRepo)
 	userDeckProgressUseCases := user_deck_progress_use_cases.NewUserDeckProgressUseCases(dbpool, globalDeckRepo, deckPermissionRepo, tokenService, userDeckProgressRepo, userProgressCardRepo)

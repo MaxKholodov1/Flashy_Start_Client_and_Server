@@ -14,7 +14,7 @@ func (u *GlobalCardUseCases) UpdateGlobalCard(ctx context.Context, cardID, versi
 		slog.Error("Failed to get access token", "err", err)
 		return nil, nil, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed to parse access token", "err", err)
 		return nil, nil, use_cases.ErrAccessTokenInvalid

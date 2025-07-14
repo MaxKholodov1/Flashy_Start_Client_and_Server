@@ -9,7 +9,7 @@ import (
 )
 
 func (u *GlobalCardUseCases) DeleteCard(ctx context.Context, cardID int, accessToken string) (bool, error) {
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed to parse access token", "err", err)
 		return false, use_cases.ErrAccessTokenInvalid

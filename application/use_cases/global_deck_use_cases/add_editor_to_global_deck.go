@@ -15,7 +15,7 @@ func (u *GlobalDeckUseCases) AddEditorToGlobalDeck(ctx context.Context, deckID i
 		slog.Error("Failed to get access token", "err", err)
 		return false, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed to parse access token", "err", err)
 		return false, use_cases.ErrAccessTokenInvalid

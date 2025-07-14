@@ -13,7 +13,7 @@ func (u *UserProgressCardUseCases) SelectNewProgressCards(ctx context.Context, c
 		slog.Error("Failed getting token from metadata", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
 	}
-	_, err = u.tokenService.ParseAccessToken(accessToken)
+	_, err = u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed parsing access token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
@@ -33,7 +33,7 @@ func (u *UserProgressCardUseCases) SelectFamiliarProgressCards(ctx context.Conte
 		slog.Error("Failed getting token from metadata", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
 	}
-	_, err = u.tokenService.ParseAccessToken(accessToken)
+	_, err = u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed parsing access token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid

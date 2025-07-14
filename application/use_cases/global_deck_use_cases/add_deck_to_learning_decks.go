@@ -10,7 +10,7 @@ import (
 )
 
 func (u *GlobalDeckUseCases) AddDeckToLearningDecks(ctx context.Context, accessToken string, deckID int) (bool, error) {
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed to parse access token", "err", err)
 		return false, use_cases.ErrAccessTokenInvalid

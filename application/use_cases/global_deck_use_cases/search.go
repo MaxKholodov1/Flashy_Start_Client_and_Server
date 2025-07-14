@@ -8,7 +8,7 @@ import (
 )
 
 func (u *GlobalDeckUseCases) SearchGlobalDecks(ctx context.Context, query, accessToken string, limit, offset int) ([]entities.SearchResultDeck, bool, error) {
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("failed to parse access token", "err", err)
 		return nil, false, use_cases.ErrAccessTokenInvalid

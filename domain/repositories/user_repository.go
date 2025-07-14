@@ -13,4 +13,6 @@ type UserRepository interface {
 	Update(user *entities.User) error
 	MarkEmailVerified(ctx context.Context, userID int) error
 	IsEmailVerified(ctx context.Context, userID int) (bool, error)
+	UpdatePasswordAndIncrementTokenVersion(ctx context.Context, userID int, newPasswordHash string) error
+	GetTokenVersion(ctx context.Context, userID int) (int, error)
 }

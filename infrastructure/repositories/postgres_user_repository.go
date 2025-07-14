@@ -129,3 +129,39 @@ func (r *PostgresUserRepository) IsEmailVerified(ctx context.Context, userID int
 	}
 	return isVerified, nil
 }
+func (r *PostgresUserRepository) UpdatePasswordAndIncrementTokenVersion(ctx context.Context, userID int, newPasswordHash string) error {
+	tx, err := r.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback(ctx)
+		} else {
+			err = tx.Commit(ctx)
+		}
+	}()
+
+	// Обновляем пароль и увеличиваем token_version в одной транзакции
+	_, err = tx.Exec(ctx, `
+		UPDATE users
+		SET password_hash = $1,
+		    token_version = token_version + 1
+		WHERE id = $2
+	`, newPasswordHash, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *PostgresUserRepository) GetTokenVersion(ctx context.Context, userID int) (int, error) {
+	query := `SELECT token_version FROM users WHERE id = $1`
+	var version int
+	err := r.db.QueryRow(ctx, query, userID).Scan(&version)
+	if err != nil {
+		return 0, err
+	}
+	return version, nil
+}

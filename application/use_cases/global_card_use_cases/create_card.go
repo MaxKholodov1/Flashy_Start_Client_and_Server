@@ -9,7 +9,7 @@ import (
 
 func (u *GlobalCardUseCases) CreateCard(ctx context.Context, question string,
 	answer string, globalDeckID int, accessToken string) (int, error) {
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed to parse the access token", "err", err)
 		return 0, use_cases.ErrAccessTokenInvalid

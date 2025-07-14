@@ -14,7 +14,7 @@ func (u *GlobalDeckUseCases) GetEditableGlobalDecks(ctx context.Context) ([]*ent
 		slog.Error("failed to get token from metadata", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("failed to parse token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid

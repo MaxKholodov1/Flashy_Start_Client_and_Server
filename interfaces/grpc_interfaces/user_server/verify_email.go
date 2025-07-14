@@ -16,11 +16,11 @@ func (s *UserServiceServer) VerifyEmail(ctx context.Context, req *user.VerifyEma
 			IsSuccess: isSuccess,
 		}, nil
 	}
-	refreshToken, err := s.tokenService.GenerateRefreshToken(int(req.UserId))
+	refreshToken, err := s.tokenService.GenerateRefreshToken(int(req.UserId), ctx)
 	if err != nil {
 		return nil, MapUserErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
 	}
-	accessToken, err := s.tokenService.GenerateAccessToken(int(req.UserId))
+	accessToken, err := s.tokenService.GenerateAccessToken(int(req.UserId), ctx)
 	if err != nil {
 		return nil, MapUserErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
 	}

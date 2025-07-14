@@ -12,7 +12,7 @@ func (u *UserDeckProgressUseCases) DeleteDeckFromLearningDecks(ctx context.Conte
 		slog.Error("Failed getting token from metadata", err)
 		return false, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed parsing token", err)
 		return false, use_cases.ErrAccessTokenInvalid

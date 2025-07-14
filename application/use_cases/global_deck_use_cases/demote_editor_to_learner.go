@@ -14,7 +14,7 @@ func (u *GlobalDeckUseCases) DemoteEditorToLearner(ctx context.Context, deckID i
 		slog.Error("failed to get token from metadata", "err", err)
 		return false, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("failed to parse token", "err", err)
 		return false, use_cases.ErrAccessTokenInvalid

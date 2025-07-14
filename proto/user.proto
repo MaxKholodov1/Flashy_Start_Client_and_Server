@@ -11,6 +11,7 @@ service UserService {
   rpc GetUser (GetUserRequest) returns (GetUserResponse);
   rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse);
   rpc SendVerificationCode (SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
+  rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordResponse);
 }
 message User {
   string userName = 1;
@@ -54,5 +55,12 @@ message SendVerificationCodeRequest{
 }
 message SendVerificationCodeResponse{
   bool is_success = 1;
+}
+message ChangePasswordRequest{
+  string password = 1;
+  string new_password = 2;
+}
+message ChangePasswordResponse{
+  bool isSuccess = 1;
 }
 

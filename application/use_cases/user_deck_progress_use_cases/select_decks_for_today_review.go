@@ -14,7 +14,7 @@ func (u *UserDeckProgressUseCases) SelectDecksForTodayReview(ctx context.Context
 		slog.Error("Failed getting token from metadata", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid
 	}
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("Failed parsing token", "err", err)
 		return nil, use_cases.ErrAccessTokenInvalid

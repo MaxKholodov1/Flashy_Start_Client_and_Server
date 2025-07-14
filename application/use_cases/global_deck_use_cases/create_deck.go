@@ -9,7 +9,7 @@ import (
 
 func (u *GlobalDeckUseCases) CreateDeckWithPermission(ctx context.Context, title string,
 	description *string, accessToken string, isPublic bool) (int, error) {
-	authID, err := u.tokenService.ParseAccessToken(accessToken)
+	authID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("failed to parse access token", "accessToken", accessToken, "err", err)
 		return 0, use_cases.ErrAccessTokenInvalid

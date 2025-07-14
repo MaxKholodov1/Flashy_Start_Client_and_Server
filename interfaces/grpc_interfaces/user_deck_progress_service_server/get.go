@@ -11,7 +11,7 @@ func (s *UserDeckProgressService) GetUserLearningProgressDecks(ctx context.Conte
 	if err != nil {
 		return nil, MapUserDeckProgressErrToGrpcErr(use_cases.ErrAccessTokenInvalid)
 	}
-	userID, err := s.tokenService.ParseAccessToken(accessToken)
+	userID, err := s.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		return nil, MapUserDeckProgressErrToGrpcErr(use_cases.ErrAccessTokenInvalid)
 	}

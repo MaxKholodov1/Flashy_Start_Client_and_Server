@@ -8,7 +8,7 @@ import (
 )
 
 func (u *GlobalDeckUseCases) UpdateGlobalDeck(ctx context.Context, globalDeck entities.GlobalDeck, accessToken string) (*entities.GlobalDeck, *bool, error) {
-	userID, err := u.tokenService.ParseAccessToken(accessToken)
+	userID, err := u.tokenService.ParseAccessToken(accessToken, ctx)
 	if err != nil {
 		slog.Error("failed to parse access token", "err", err)
 		return nil, nil, use_cases.ErrAccessTokenInvalid

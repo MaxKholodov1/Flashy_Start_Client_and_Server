@@ -17,11 +17,11 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *auth.LoginRequest) (
 			UserID:     userr.ID,
 		}, nil
 	}
-	accessToken, err := s.tokenService.GenerateAccessToken(int(userr.ID))
+	accessToken, err := s.tokenService.GenerateAccessToken(int(userr.ID), ctx)
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
 	}
-	refreshToken, err := s.tokenService.GenerateRefreshToken(int(userr.ID))
+	refreshToken, err := s.tokenService.GenerateRefreshToken(int(userr.ID), ctx)
 	if err != nil {
 		return nil, MapAuthErrToGrpcErr(use_cases.ErrFailedToGenerateToken)
 	}
