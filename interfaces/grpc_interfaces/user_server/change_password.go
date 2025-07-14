@@ -12,7 +12,7 @@ func (s *UserServiceServer) ChangePassword(ctx context.Context, req *user.Change
 	}
 	return &user.ChangePasswordResponse{
 		IsSuccess:    isSuccess,
-		RefreshToken: *refreshToken,
-		AccessToken:  *accessToken,
+		RefreshToken: refreshToken,
+		AccessToken:  accessToken,
 	}, nil
 }
