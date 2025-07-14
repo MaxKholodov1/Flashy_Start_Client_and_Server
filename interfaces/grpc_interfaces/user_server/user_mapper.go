@@ -33,6 +33,8 @@ func MapUserErrToGrpcErr(err error) error {
 		return status.Error(codes.Unauthenticated, err.Error())
 	case use_cases.ErrVerificationError:
 		return status.Error(codes.FailedPrecondition, err.Error())
+	case use_cases.ErrIncorrectPassword:
+		return status.Error(codes.PermissionDenied, err.Error())
 	default:
 		return status.Error(codes.Internal, "unexpected error: "+err.Error())
 	}
