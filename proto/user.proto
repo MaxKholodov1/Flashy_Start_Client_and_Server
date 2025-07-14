@@ -62,5 +62,7 @@ message ChangePasswordRequest{
 }
 message ChangePasswordResponse{
   bool isSuccess = 1;
+  string refresh_token = 2;
+  string access_token = 3;
 }
 

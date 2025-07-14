@@ -553,6 +553,8 @@ func (x *ChangePasswordRequest) GetNewPassword() string {
 type ChangePasswordResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	IsSuccess     bool                   `protobuf:"varint,1,opt,name=isSuccess,proto3" json:"isSuccess,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	AccessToken   string                 `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -592,6 +594,20 @@ func (x *ChangePasswordResponse) GetIsSuccess() bool {
 		return x.IsSuccess
 	}
 	return false
+}
+
+func (x *ChangePasswordResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *ChangePasswordResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
 }
 
 var File_proto_user_proto protoreflect.FileDescriptor
@@ -634,9 +650,11 @@ const file_proto_user_proto_rawDesc = "" +
 	"is_success\x18\x01 \x01(\bR\tisSuccess\"V\n" +
 	"\x15ChangePasswordRequest\x12\x1a\n" +
 	"\bpassword\x18\x01 \x01(\tR\bpassword\x12!\n" +
-	"\fnew_password\x18\x02 \x01(\tR\vnewPassword\"6\n" +
+	"\fnew_password\x18\x02 \x01(\tR\vnewPassword\"~\n" +
 	"\x16ChangePasswordResponse\x12\x1c\n" +
-	"\tisSuccess\x18\x01 \x01(\bR\tisSuccess2\xc6\x03\n" +
+	"\tisSuccess\x18\x01 \x01(\bR\tisSuccess\x12#\n" +
+	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12!\n" +
+	"\faccess_token\x18\x03 \x01(\tR\vaccessToken2\xc6\x03\n" +
 	"\vUserService\x12O\n" +
 	"\n" +
 	"CreateUser\x12\x1f.user.service.CreateUserRequest\x1a .user.service.CreateUserResponse\x12F\n" +
