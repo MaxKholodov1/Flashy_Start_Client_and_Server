@@ -24,6 +24,7 @@ const (
 	UserService_VerifyEmail_FullMethodName          = "/user.service.UserService/VerifyEmail"
 	UserService_SendVerificationCode_FullMethodName = "/user.service.UserService/SendVerificationCode"
 	UserService_ChangePassword_FullMethodName       = "/user.service.UserService/ChangePassword"
+	UserService_PasswordRecovery_FullMethodName     = "/user.service.UserService/PasswordRecovery"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -35,6 +36,7 @@ type UserServiceClient interface {
 	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
 	SendVerificationCode(ctx context.Context, in *SendVerificationCodeRequest, opts ...grpc.CallOption) (*SendVerificationCodeResponse, error)
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
+	PasswordRecovery(ctx context.Context, in *PasswordRecoveryRequest, opts ...grpc.CallOption) (*PasswordRecoveryResponse, error)
 }
 
 type userServiceClient struct {
@@ -95,6 +97,16 @@ func (c *userServiceClient) ChangePassword(ctx context.Context, in *ChangePasswo
 	return out, nil
 }
 
+func (c *userServiceClient) PasswordRecovery(ctx context.Context, in *PasswordRecoveryRequest, opts ...grpc.CallOption) (*PasswordRecoveryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PasswordRecoveryResponse)
+	err := c.cc.Invoke(ctx, UserService_PasswordRecovery_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type UserServiceServer interface {
 	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
 	SendVerificationCode(context.Context, *SendVerificationCodeRequest) (*SendVerificationCodeResponse, error)
 	ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error)
+	PasswordRecovery(context.Context, *PasswordRecoveryRequest) (*PasswordRecoveryResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedUserServiceServer) SendVerificationCode(context.Context, *Sen
 }
 func (UnimplementedUserServiceServer) ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
+}
+func (UnimplementedUserServiceServer) PasswordRecovery(context.Context, *PasswordRecoveryRequest) (*PasswordRecoveryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PasswordRecovery not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -240,6 +256,24 @@ func _UserService_ChangePassword_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_PasswordRecovery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PasswordRecoveryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).PasswordRecovery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_PasswordRecovery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).PasswordRecovery(ctx, req.(*PasswordRecoveryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangePassword",
 			Handler:    _UserService_ChangePassword_Handler,
+		},
+		{
+			MethodName: "PasswordRecovery",
+			Handler:    _UserService_PasswordRecovery_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

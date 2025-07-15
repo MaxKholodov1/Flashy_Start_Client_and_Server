@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5"
 	"go_server/domain/entities"
 )
 
@@ -15,4 +16,6 @@ type UserRepository interface {
 	IsEmailVerified(ctx context.Context, userID int) (bool, error)
 	UpdatePasswordAndIncrementTokenVersion(ctx context.Context, userID int, newPasswordHash string) error
 	GetTokenVersion(ctx context.Context, userID int) (int, error)
+	BeginTx(ctx context.Context) (pgx.Tx, error)
+	UpdatePasswordAndIncrementTokenVersionTx(ctx context.Context, tx pgx.Tx, userID int, newPasswordHash string) error
 }

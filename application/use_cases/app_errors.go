@@ -40,6 +40,8 @@ var (
 	ErrPermissionNotFound              = errors.New("permission not found")
 	ErrFailedToSendEmail               = errors.New("failed to send email")
 	ErrVerificationError               = errors.New("verification error")
+	ErrTryingToSendEmailToNotVerified  = errors.New("trying to send email to not verified email")
+	ErrFailedToGenerateValidPassword   = errors.New("failed to generate valid password")
 )
 
 func ErrDBFailure(err error) error {

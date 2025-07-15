@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5"
 	"go_server/domain/entities"
 	"time"
 
@@ -14,6 +15,10 @@ type PostgresUserRepository struct {
 
 func NewPostgresUserRepository(db *pgxpool.Pool) *PostgresUserRepository {
 	return &PostgresUserRepository{db: db}
+}
+
+func (r *PostgresUserRepository) BeginTx(ctx context.Context) (pgx.Tx, error) {
+	return r.db.Begin(ctx)
 }
 
 func (r *PostgresUserRepository) Create(user *entities.User) (int, error) {
@@ -164,4 +169,13 @@ func (r *PostgresUserRepository) GetTokenVersion(ctx context.Context, userID int
 		return 0, err
 	}
 	return version, nil
+}
+func (r *PostgresUserRepository) UpdatePasswordAndIncrementTokenVersionTx(ctx context.Context, tx pgx.Tx, userID int, newPasswordHash string) error {
+	_, err := tx.Exec(ctx, `
+		UPDATE users
+		SET password_hash = $1,
+		    token_version = token_version + 1
+		WHERE id = $2
+	`, newPasswordHash, userID)
+	return err
 }

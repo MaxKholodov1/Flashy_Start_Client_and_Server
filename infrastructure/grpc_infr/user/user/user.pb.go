@@ -610,6 +610,94 @@ func (x *ChangePasswordResponse) GetAccessToken() string {
 	return ""
 }
 
+type PasswordRecoveryRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	UsernameOrEmail string                 `protobuf:"bytes,1,opt,name=username_or_email,json=usernameOrEmail,proto3" json:"username_or_email,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *PasswordRecoveryRequest) Reset() {
+	*x = PasswordRecoveryRequest{}
+	mi := &file_proto_user_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PasswordRecoveryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordRecoveryRequest) ProtoMessage() {}
+
+func (x *PasswordRecoveryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordRecoveryRequest.ProtoReflect.Descriptor instead.
+func (*PasswordRecoveryRequest) Descriptor() ([]byte, []int) {
+	return file_proto_user_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *PasswordRecoveryRequest) GetUsernameOrEmail() string {
+	if x != nil {
+		return x.UsernameOrEmail
+	}
+	return ""
+}
+
+type PasswordRecoveryResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsSuccess     bool                   `protobuf:"varint,1,opt,name=isSuccess,proto3" json:"isSuccess,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PasswordRecoveryResponse) Reset() {
+	*x = PasswordRecoveryResponse{}
+	mi := &file_proto_user_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PasswordRecoveryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PasswordRecoveryResponse) ProtoMessage() {}
+
+func (x *PasswordRecoveryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PasswordRecoveryResponse.ProtoReflect.Descriptor instead.
+func (*PasswordRecoveryResponse) Descriptor() ([]byte, []int) {
+	return file_proto_user_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *PasswordRecoveryResponse) GetIsSuccess() bool {
+	if x != nil {
+		return x.IsSuccess
+	}
+	return false
+}
+
 var File_proto_user_proto protoreflect.FileDescriptor
 
 const file_proto_user_proto_rawDesc = "" +
@@ -654,14 +742,19 @@ const file_proto_user_proto_rawDesc = "" +
 	"\x16ChangePasswordResponse\x12\x1c\n" +
 	"\tisSuccess\x18\x01 \x01(\bR\tisSuccess\x12#\n" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12!\n" +
-	"\faccess_token\x18\x03 \x01(\tR\vaccessToken2\xc6\x03\n" +
+	"\faccess_token\x18\x03 \x01(\tR\vaccessToken\"E\n" +
+	"\x17PasswordRecoveryRequest\x12*\n" +
+	"\x11username_or_email\x18\x01 \x01(\tR\x0fusernameOrEmail\"8\n" +
+	"\x18PasswordRecoveryResponse\x12\x1c\n" +
+	"\tisSuccess\x18\x01 \x01(\bR\tisSuccess2\xa9\x04\n" +
 	"\vUserService\x12O\n" +
 	"\n" +
 	"CreateUser\x12\x1f.user.service.CreateUserRequest\x1a .user.service.CreateUserResponse\x12F\n" +
 	"\aGetUser\x12\x1c.user.service.GetUserRequest\x1a\x1d.user.service.GetUserResponse\x12R\n" +
 	"\vVerifyEmail\x12 .user.service.VerifyEmailRequest\x1a!.user.service.VerifyEmailResponse\x12m\n" +
 	"\x14SendVerificationCode\x12).user.service.SendVerificationCodeRequest\x1a*.user.service.SendVerificationCodeResponse\x12[\n" +
-	"\x0eChangePassword\x12#.user.service.ChangePasswordRequest\x1a$.user.service.ChangePasswordResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
+	"\x0eChangePassword\x12#.user.service.ChangePasswordRequest\x1a$.user.service.ChangePasswordResponse\x12a\n" +
+	"\x10PasswordRecovery\x12%.user.service.PasswordRecoveryRequest\x1a&.user.service.PasswordRecoveryResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
 
 var (
 	file_proto_user_proto_rawDescOnce sync.Once
@@ -675,7 +768,7 @@ func file_proto_user_proto_rawDescGZIP() []byte {
 	return file_proto_user_proto_rawDescData
 }
 
-var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_proto_user_proto_goTypes = []any{
 	(*User)(nil),                         // 0: user.service.User
 	(*CreateUserRequest)(nil),            // 1: user.service.CreateUserRequest
@@ -688,23 +781,27 @@ var file_proto_user_proto_goTypes = []any{
 	(*SendVerificationCodeResponse)(nil), // 8: user.service.SendVerificationCodeResponse
 	(*ChangePasswordRequest)(nil),        // 9: user.service.ChangePasswordRequest
 	(*ChangePasswordResponse)(nil),       // 10: user.service.ChangePasswordResponse
-	(*timestamppb.Timestamp)(nil),        // 11: google.protobuf.Timestamp
+	(*PasswordRecoveryRequest)(nil),      // 11: user.service.PasswordRecoveryRequest
+	(*PasswordRecoveryResponse)(nil),     // 12: user.service.PasswordRecoveryResponse
+	(*timestamppb.Timestamp)(nil),        // 13: google.protobuf.Timestamp
 }
 var file_proto_user_proto_depIdxs = []int32{
-	11, // 0: user.service.User.created_at:type_name -> google.protobuf.Timestamp
-	11, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	13, // 0: user.service.User.created_at:type_name -> google.protobuf.Timestamp
+	13, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
 	1,  // 2: user.service.UserService.CreateUser:input_type -> user.service.CreateUserRequest
 	5,  // 3: user.service.UserService.GetUser:input_type -> user.service.GetUserRequest
 	3,  // 4: user.service.UserService.VerifyEmail:input_type -> user.service.VerifyEmailRequest
 	7,  // 5: user.service.UserService.SendVerificationCode:input_type -> user.service.SendVerificationCodeRequest
 	9,  // 6: user.service.UserService.ChangePassword:input_type -> user.service.ChangePasswordRequest
-	2,  // 7: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
-	6,  // 8: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
-	4,  // 9: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
-	8,  // 10: user.service.UserService.SendVerificationCode:output_type -> user.service.SendVerificationCodeResponse
-	10, // 11: user.service.UserService.ChangePassword:output_type -> user.service.ChangePasswordResponse
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
+	11, // 7: user.service.UserService.PasswordRecovery:input_type -> user.service.PasswordRecoveryRequest
+	2,  // 8: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
+	6,  // 9: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
+	4,  // 10: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
+	8,  // 11: user.service.UserService.SendVerificationCode:output_type -> user.service.SendVerificationCodeResponse
+	10, // 12: user.service.UserService.ChangePassword:output_type -> user.service.ChangePasswordResponse
+	12, // 13: user.service.UserService.PasswordRecovery:output_type -> user.service.PasswordRecoveryResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
 	2,  // [2:2] is the sub-list for extension extendee
 	0,  // [0:2] is the sub-list for field type_name
@@ -721,7 +818,7 @@ func file_proto_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_user_proto_rawDesc), len(file_proto_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
