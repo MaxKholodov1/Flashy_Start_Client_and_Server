@@ -2,6 +2,7 @@ package user_use_cases
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5"
 	"go_server/application/use_cases"
 	"go_server/domain/entities"
 	"go_server/domain/services"
@@ -17,6 +18,9 @@ func (u *UserUseCases) PasswordRecovery(ctx context.Context, usernameOrEmail str
 		user, err = u.userRepository.GetByEmail(usernameOrEmail)
 	} else {
 		user, err = u.userRepository.GetByUserName(usernameOrEmail)
+	}
+	if err == pgx.ErrNoRows {
+		return false, use_cases.ErrUserNotFound
 	}
 	if err != nil {
 		return false, use_cases.ErrDBFailure(err)
