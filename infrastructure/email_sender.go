@@ -97,8 +97,11 @@ func (s *SmtpEmailSender) SendVerificationCode(toEmail, code string) error {
 }
 
 func (s *SmtpEmailSender) SendNewPassword(toEmail, newPassword string) error {
-	subject := "Email Verification Code"
-	body := fmt.Sprintf("Your new password is: %s", newPassword, "You can change it in Settings")
+	subject := "Your new password"
+	body := fmt.Sprintf(
+		"Your new password is: %s\n\nYou can change it in the app Settings.",
+		newPassword,
+	)
 
 	msg := strings.Join([]string{
 		fmt.Sprintf("From: %s", s.FromEmail),
@@ -112,7 +115,6 @@ func (s *SmtpEmailSender) SendNewPassword(toEmail, newPassword string) error {
 
 	addr := fmt.Sprintf("%s:%d", s.SMTPHost, s.SMTPPort)
 
-	// TLS-соединение с сервером
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: false,
 		ServerName:         s.SMTPHost,
@@ -120,46 +122,45 @@ func (s *SmtpEmailSender) SendNewPassword(toEmail, newPassword string) error {
 
 	conn, err := tls.Dial("tcp", addr, tlsConfig)
 	if err != nil {
-		slog.Error("tls dial failed: %w", err, err.Error())
+		slog.Error("tls dial failed", "err", err)
 		return fmt.Errorf("tls dial failed: %w", err)
 	}
 	defer conn.Close()
 
 	client, err := smtp.NewClient(conn, s.SMTPHost)
 	if err != nil {
-		slog.Error("smtp new client failed: %w", "err", err.Error())
+		slog.Error("smtp new client failed", "err", err)
 		return fmt.Errorf("smtp client creation failed: %w", err)
 	}
 	defer client.Close()
 
-	// Аутентификация
 	auth := smtp.PlainAuth("", s.Username, s.Password, s.SMTPHost)
 	if err := client.Auth(auth); err != nil {
-		slog.Error("smtp auth failed: %w", "err", err.Error())
+		slog.Error("smtp auth failed", "err", err)
 		return fmt.Errorf("smtp auth failed: %w", err)
 	}
 
 	if err := client.Mail(s.FromEmail); err != nil {
-		slog.Error("smtp mail failed: %w", "err", err.Error())
+		slog.Error("smtp MAIL FROM failed", "err", err)
 		return fmt.Errorf("MAIL FROM failed: %w", err)
 	}
 	if err := client.Rcpt(toEmail); err != nil {
-		slog.Error("smtp rcpt failed: %w", "err", err.Error())
+		slog.Error("smtp RCPT TO failed", "err", err)
 		return fmt.Errorf("RCPT TO failed: %w", err)
 	}
 
 	writer, err := client.Data()
 	if err != nil {
-		slog.Error("smtp get data failed: %w", "err", err.Error())
+		slog.Error("smtp DATA failed", "err", err)
 		return fmt.Errorf("DATA command failed: %w", err)
 	}
 	_, err = writer.Write([]byte(msg))
 	if err != nil {
-		slog.Error("smtp data write failed: %w", "err", err.Error())
+		slog.Error("smtp write failed", "err", err)
 		return fmt.Errorf("message write failed: %w", err)
 	}
 	if err := writer.Close(); err != nil {
-		slog.Error("smtp data close failed: %w", "err", err.Error())
+		slog.Error("smtp writer close failed", "err", err)
 		return fmt.Errorf("DATA close failed: %w", err)
 	}
 
