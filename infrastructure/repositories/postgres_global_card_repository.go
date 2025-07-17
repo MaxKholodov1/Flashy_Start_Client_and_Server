@@ -2,6 +2,8 @@ package repositories
 
 import (
 	"context"
+	"fmt"
+	"github.com/jackc/pgx/v5"
 	"go_server/domain/entities"
 	"time"
 
@@ -137,4 +139,25 @@ func (r *PostgresGlobalCardRepository) DeleteCardByID(cardID int) error {
 		cardID,
 	)
 	return err
+}
+func (r *PostgresGlobalCardRepository) DeleteCardsByAuthorIDTX(ctx context.Context, tx pgx.Tx, authorID int) error {
+	_, err := tx.Exec(
+		ctx,
+		`DELETE FROM global_cards WHERE author_id = $1`,
+		authorID,
+	)
+	return err
+}
+
+// DeleteByDeckIDTx удаляет все карточки в указанной колоде (в транзакции)
+func (r *PostgresGlobalCardRepository) DeleteByDeckIDTx(ctx context.Context, tx pgx.Tx, deckID int) error {
+	query := `DELETE FROM global_cards WHERE deck_id = $1`
+
+	// Выполняем запрос в транзакции
+	_, err := tx.Exec(ctx, query, deckID)
+	if err != nil {
+		return fmt.Errorf("failed to delete cards for deck %d: %w", deckID, err)
+	}
+
+	return nil
 }

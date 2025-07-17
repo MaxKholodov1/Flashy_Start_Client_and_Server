@@ -13,6 +13,7 @@ service UserService {
   rpc SendVerificationCode (SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
   rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordResponse);
   rpc PasswordRecovery (PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
 }
 message User {
   string userName = 1;
@@ -72,4 +73,10 @@ message PasswordRecoveryRequest{
 message PasswordRecoveryResponse{
   bool isSuccess = 1;
 }
+message DeleteUserRequest{
+}
+message DeleteUserResponse{
+  bool is_success = 1;
+}
+
 

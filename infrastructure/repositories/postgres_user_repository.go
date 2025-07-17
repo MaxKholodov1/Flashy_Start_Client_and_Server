@@ -179,3 +179,8 @@ func (r *PostgresUserRepository) UpdatePasswordAndIncrementTokenVersionTx(ctx co
 	`, newPasswordHash, userID)
 	return err
 }
+func (r *PostgresUserRepository) DeleteUserTx(ctx context.Context, tx pgx.Tx, userID int) error {
+	query := `DELETE FROM users WHERE id = $1`
+	_, err := tx.Exec(ctx, query, userID)
+	return err
+}

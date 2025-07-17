@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"github.com/jackc/pgx/v5"
 	"go_server/domain/entities"
 )
 
@@ -14,4 +15,5 @@ type EmailVerificationRepository interface {
 
 	// Удалить запись подтверждения после успешной верификации
 	DeleteByUserID(ctx context.Context, userID int) error
+	DeleteByUserIDTX(ctx context.Context, tx pgx.Tx, userID int) error
 }

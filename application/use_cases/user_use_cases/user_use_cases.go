@@ -11,8 +11,21 @@ type UserUseCases struct {
 	emailVerificationRepository repositories.EmailVerificationRepository
 	emailSender                 interfaces.EmailSender
 	tokenService                token_services.TokenService
+	globalCardRepository        repositories.GlobalCardRepository
+	globalDeckRepository        repositories.GlobalDeckRepository
+	deckPermissionRepository    repositories.DeckPermissionRepository
 }
 
-func NewUserService(userRepo repositories.UserRepository, emailRepo repositories.EmailVerificationRepository, emailSender interfaces.EmailSender, tokenService token_services.TokenService) *UserUseCases {
-	return &UserUseCases{userRepository: userRepo, emailVerificationRepository: emailRepo, emailSender: emailSender, tokenService: tokenService}
+func NewUserService(userRepo repositories.UserRepository, emailRepo repositories.EmailVerificationRepository,
+	emailSender interfaces.EmailSender, tokenService token_services.TokenService, globalCardRepository repositories.GlobalCardRepository,
+	globalDeckRepository repositories.GlobalDeckRepository, deckPermissionRepository repositories.DeckPermissionRepository) *UserUseCases {
+	return &UserUseCases{
+		userRepository:              userRepo,
+		emailVerificationRepository: emailRepo,
+		emailSender:                 emailSender,
+		tokenService:                tokenService,
+		globalCardRepository:        globalCardRepository,
+		globalDeckRepository:        globalDeckRepository,
+		deckPermissionRepository:    deckPermissionRepository,
+	}
 }

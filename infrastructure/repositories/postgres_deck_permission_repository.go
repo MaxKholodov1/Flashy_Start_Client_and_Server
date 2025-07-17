@@ -116,3 +116,8 @@ func (r *PostgresDeckPermissionRepository) DeleteDeckPermissionByUserIDAndDeckID
 		`DELETE FROM deck_permissions WHERE user_id = $1 AND deck_id = $2`, userID, deckID)
 	return err
 }
+func (r *PostgresDeckPermissionRepository) DeleteAllPermissionsForUserTx(ctx context.Context, tx pgx.Tx, userID int) error {
+	query := `DELETE FROM deck_permissions WHERE user_id = $1`
+	_, err := tx.Exec(ctx, query, userID)
+	return err
+}

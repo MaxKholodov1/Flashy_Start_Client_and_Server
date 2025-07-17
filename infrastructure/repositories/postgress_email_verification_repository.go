@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"errors"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go_server/domain/entities"
 )
@@ -40,6 +41,17 @@ func (r *PostgresEmailVerificationRepository) GetByUserID(ctx context.Context, u
 
 func (r *PostgresEmailVerificationRepository) DeleteByUserID(ctx context.Context, userID int) error {
 	commandTag, err := r.db.Exec(ctx, "DELETE FROM email_verifications WHERE user_id = $1;", userID)
+	if err != nil {
+		return err
+	}
+	if commandTag.RowsAffected() == 0 {
+		return errors.New("no email verification record found to delete")
+	}
+	return nil
+}
+
+func (r *PostgresEmailVerificationRepository) DeleteByUserIDTX(ctx context.Context, tx pgx.Tx, userID int) error {
+	commandTag, err := tx.Exec(ctx, "DELETE FROM email_verifications WHERE user_id = $1;", userID)
 	if err != nil {
 		return err
 	}

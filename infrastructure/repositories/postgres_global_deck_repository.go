@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -239,4 +240,49 @@ func (r *PostgresGlobalDeckRepository) SearchByTitleOffset(query string, limit, 
 	}
 
 	return decks, hasMore, nil
+}
+func (r *PostgresGlobalDeckRepository) DeleteByAuthorIDTx(ctx context.Context, tx pgx.Tx, authorID int) error {
+	query := `DELETE FROM global_decks WHERE author_id = $1`
+	_, err := tx.Exec(ctx, query, authorID)
+	return err
+}
+func (r *PostgresGlobalDeckRepository) ListByUserTx(ctx context.Context, tx pgx.Tx, userID int) ([]*entities.GlobalDeck, error) {
+	query := `
+        SELECT id, title, description, author_id, created_at, updated_at, is_public, tags, version
+        FROM global_decks
+        WHERE author_id = $1
+        ORDER BY created_at DESC
+    `
+
+	rows, err := tx.Query(ctx, query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query user decks: %w", err)
+	}
+	defer rows.Close()
+
+	var decks []*entities.GlobalDeck
+	for rows.Next() {
+		var deck entities.GlobalDeck
+		err := rows.Scan(
+			&deck.ID,
+			&deck.Title,
+			&deck.Description,
+			&deck.AuthorID,
+			&deck.CreatedAt,
+			&deck.UpdatedAt,
+			&deck.IsPublic,
+			&deck.Tags,
+			&deck.Version,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan deck row: %w", err)
+		}
+		decks = append(decks, &deck)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error after scanning deck rows: %w", err)
+	}
+
+	return decks, nil
 }

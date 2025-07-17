@@ -14,4 +14,6 @@ type GlobalDeckRepository interface {
 	Delete(id int) error
 	ListByUser(userID int) ([]*entities.GlobalDeck, error)
 	SearchByTitleOffset(query string, limit, offset int) ([]*entities.GlobalDeck, bool, error)
+	DeleteByAuthorIDTx(ctx context.Context, tx pgx.Tx, authorID int) error
+	ListByUserTx(ctx context.Context, tx pgx.Tx, userID int) ([]*entities.GlobalDeck, error)
 }

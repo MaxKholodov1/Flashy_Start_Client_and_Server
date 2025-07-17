@@ -98,7 +98,7 @@ func (s *SmtpEmailSender) SendVerificationCode(toEmail, code string) error {
 
 func (s *SmtpEmailSender) SendNewPassword(toEmail, newPassword string) error {
 	subject := "Email Verification Code"
-	body := fmt.Sprintf("Your verification newPassword is: %s", newPassword)
+	body := fmt.Sprintf("Your new password is: %s", newPassword, "You can change it in Settings")
 
 	msg := strings.Join([]string{
 		fmt.Sprintf("From: %s", s.FromEmail),

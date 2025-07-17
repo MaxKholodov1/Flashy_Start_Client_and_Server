@@ -18,4 +18,5 @@ type UserRepository interface {
 	GetTokenVersion(ctx context.Context, userID int) (int, error)
 	BeginTx(ctx context.Context) (pgx.Tx, error)
 	UpdatePasswordAndIncrementTokenVersionTx(ctx context.Context, tx pgx.Tx, userID int, newPasswordHash string) error
+	DeleteUserTx(ctx context.Context, tx pgx.Tx, userID int) error
 }

@@ -14,4 +14,5 @@ type DeckPermissionRepository interface {
 	GetDeckPermissionByUserIDAndDeckID(ctx context.Context, userID int, deckID int) (*entities.DeckPermission, error)
 	UpdateRoleByUserIDAndDeckID(ctx context.Context, userID int, deckID int, newRole string) error
 	DeleteDeckPermissionByUserIDAndDeckIDTx(ctx context.Context, tx pgx.Tx, userID, deckID int) error
+	DeleteAllPermissionsForUserTx(ctx context.Context, tx pgx.Tx, userID int) error
 }
