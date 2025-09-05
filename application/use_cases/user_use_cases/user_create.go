@@ -88,7 +88,7 @@ func (u *UserUseCases) CreateDefUser(ctx context.Context) (int, error) {
 	}
 
 	// Дефолтный пароль (например, тоже userName, либо жёстко "defaultPass123")
-	defaultPassword := userName + "_password123432"
+	defaultPassword := userName + "_password123432A"
 
 	if err := validation.ValidatePassword(defaultPassword); err != nil {
 		return 0, err
