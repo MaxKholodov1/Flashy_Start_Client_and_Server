@@ -778,6 +778,110 @@ func (x *DeleteUserResponse) GetIsSuccess() bool {
 	return false
 }
 
+type CreateDefUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateDefUserRequest) Reset() {
+	*x = CreateDefUserRequest{}
+	mi := &file_proto_user_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDefUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDefUserRequest) ProtoMessage() {}
+
+func (x *CreateDefUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDefUserRequest.ProtoReflect.Descriptor instead.
+func (*CreateDefUserRequest) Descriptor() ([]byte, []int) {
+	return file_proto_user_proto_rawDescGZIP(), []int{15}
+}
+
+type CreateDefUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsSuccess     bool                   `protobuf:"varint,1,opt,name=is_success,json=isSuccess,proto3" json:"is_success,omitempty"`
+	UserID        int32                  `protobuf:"varint,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	AccessToken   string                 `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	RefreshToken  string                 `protobuf:"bytes,4,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateDefUserResponse) Reset() {
+	*x = CreateDefUserResponse{}
+	mi := &file_proto_user_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateDefUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateDefUserResponse) ProtoMessage() {}
+
+func (x *CreateDefUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateDefUserResponse.ProtoReflect.Descriptor instead.
+func (*CreateDefUserResponse) Descriptor() ([]byte, []int) {
+	return file_proto_user_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *CreateDefUserResponse) GetIsSuccess() bool {
+	if x != nil {
+		return x.IsSuccess
+	}
+	return false
+}
+
+func (x *CreateDefUserResponse) GetUserID() int32 {
+	if x != nil {
+		return x.UserID
+	}
+	return 0
+}
+
+func (x *CreateDefUserResponse) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+func (x *CreateDefUserResponse) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
 var File_proto_user_proto protoreflect.FileDescriptor
 
 const file_proto_user_proto_rawDesc = "" +
@@ -830,7 +934,14 @@ const file_proto_user_proto_rawDesc = "" +
 	"\x11DeleteUserRequest\"3\n" +
 	"\x12DeleteUserResponse\x12\x1d\n" +
 	"\n" +
-	"is_success\x18\x01 \x01(\bR\tisSuccess2\xfa\x04\n" +
+	"is_success\x18\x01 \x01(\bR\tisSuccess\"\x16\n" +
+	"\x14CreateDefUserRequest\"\x96\x01\n" +
+	"\x15CreateDefUserResponse\x12\x1d\n" +
+	"\n" +
+	"is_success\x18\x01 \x01(\bR\tisSuccess\x12\x16\n" +
+	"\x06userID\x18\x02 \x01(\x05R\x06userID\x12!\n" +
+	"\faccess_token\x18\x03 \x01(\tR\vaccessToken\x12#\n" +
+	"\rrefresh_token\x18\x04 \x01(\tR\frefreshToken2\xd4\x05\n" +
 	"\vUserService\x12O\n" +
 	"\n" +
 	"CreateUser\x12\x1f.user.service.CreateUserRequest\x1a .user.service.CreateUserResponse\x12F\n" +
@@ -840,7 +951,8 @@ const file_proto_user_proto_rawDesc = "" +
 	"\x0eChangePassword\x12#.user.service.ChangePasswordRequest\x1a$.user.service.ChangePasswordResponse\x12a\n" +
 	"\x10PasswordRecovery\x12%.user.service.PasswordRecoveryRequest\x1a&.user.service.PasswordRecoveryResponse\x12O\n" +
 	"\n" +
-	"DeleteUser\x12\x1f.user.service.DeleteUserRequest\x1a .user.service.DeleteUserResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
+	"DeleteUser\x12\x1f.user.service.DeleteUserRequest\x1a .user.service.DeleteUserResponse\x12X\n" +
+	"\rCreateDefUser\x12\".user.service.CreateDefUserRequest\x1a#.user.service.CreateDefUserResponseB)Z'infrastructure/grpc_infr/user/user;userb\x06proto3"
 
 var (
 	file_proto_user_proto_rawDescOnce sync.Once
@@ -854,7 +966,7 @@ func file_proto_user_proto_rawDescGZIP() []byte {
 	return file_proto_user_proto_rawDescData
 }
 
-var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_proto_user_proto_goTypes = []any{
 	(*User)(nil),                         // 0: user.service.User
 	(*CreateUserRequest)(nil),            // 1: user.service.CreateUserRequest
@@ -871,11 +983,13 @@ var file_proto_user_proto_goTypes = []any{
 	(*PasswordRecoveryResponse)(nil),     // 12: user.service.PasswordRecoveryResponse
 	(*DeleteUserRequest)(nil),            // 13: user.service.DeleteUserRequest
 	(*DeleteUserResponse)(nil),           // 14: user.service.DeleteUserResponse
-	(*timestamppb.Timestamp)(nil),        // 15: google.protobuf.Timestamp
+	(*CreateDefUserRequest)(nil),         // 15: user.service.CreateDefUserRequest
+	(*CreateDefUserResponse)(nil),        // 16: user.service.CreateDefUserResponse
+	(*timestamppb.Timestamp)(nil),        // 17: google.protobuf.Timestamp
 }
 var file_proto_user_proto_depIdxs = []int32{
-	15, // 0: user.service.User.created_at:type_name -> google.protobuf.Timestamp
-	15, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	17, // 0: user.service.User.created_at:type_name -> google.protobuf.Timestamp
+	17, // 1: user.service.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
 	1,  // 2: user.service.UserService.CreateUser:input_type -> user.service.CreateUserRequest
 	5,  // 3: user.service.UserService.GetUser:input_type -> user.service.GetUserRequest
 	3,  // 4: user.service.UserService.VerifyEmail:input_type -> user.service.VerifyEmailRequest
@@ -883,15 +997,17 @@ var file_proto_user_proto_depIdxs = []int32{
 	9,  // 6: user.service.UserService.ChangePassword:input_type -> user.service.ChangePasswordRequest
 	11, // 7: user.service.UserService.PasswordRecovery:input_type -> user.service.PasswordRecoveryRequest
 	13, // 8: user.service.UserService.DeleteUser:input_type -> user.service.DeleteUserRequest
-	2,  // 9: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
-	6,  // 10: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
-	4,  // 11: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
-	8,  // 12: user.service.UserService.SendVerificationCode:output_type -> user.service.SendVerificationCodeResponse
-	10, // 13: user.service.UserService.ChangePassword:output_type -> user.service.ChangePasswordResponse
-	12, // 14: user.service.UserService.PasswordRecovery:output_type -> user.service.PasswordRecoveryResponse
-	14, // 15: user.service.UserService.DeleteUser:output_type -> user.service.DeleteUserResponse
-	9,  // [9:16] is the sub-list for method output_type
-	2,  // [2:9] is the sub-list for method input_type
+	15, // 9: user.service.UserService.CreateDefUser:input_type -> user.service.CreateDefUserRequest
+	2,  // 10: user.service.UserService.CreateUser:output_type -> user.service.CreateUserResponse
+	6,  // 11: user.service.UserService.GetUser:output_type -> user.service.GetUserResponse
+	4,  // 12: user.service.UserService.VerifyEmail:output_type -> user.service.VerifyEmailResponse
+	8,  // 13: user.service.UserService.SendVerificationCode:output_type -> user.service.SendVerificationCodeResponse
+	10, // 14: user.service.UserService.ChangePassword:output_type -> user.service.ChangePasswordResponse
+	12, // 15: user.service.UserService.PasswordRecovery:output_type -> user.service.PasswordRecoveryResponse
+	14, // 16: user.service.UserService.DeleteUser:output_type -> user.service.DeleteUserResponse
+	16, // 17: user.service.UserService.CreateDefUser:output_type -> user.service.CreateDefUserResponse
+	10, // [10:18] is the sub-list for method output_type
+	2,  // [2:10] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
 	2,  // [2:2] is the sub-list for extension extendee
 	0,  // [0:2] is the sub-list for field type_name
@@ -908,7 +1024,7 @@ func file_proto_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_user_proto_rawDesc), len(file_proto_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

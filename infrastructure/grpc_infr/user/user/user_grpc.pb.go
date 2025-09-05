@@ -26,6 +26,7 @@ const (
 	UserService_ChangePassword_FullMethodName       = "/user.service.UserService/ChangePassword"
 	UserService_PasswordRecovery_FullMethodName     = "/user.service.UserService/PasswordRecovery"
 	UserService_DeleteUser_FullMethodName           = "/user.service.UserService/DeleteUser"
+	UserService_CreateDefUser_FullMethodName        = "/user.service.UserService/CreateDefUser"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -39,6 +40,7 @@ type UserServiceClient interface {
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
 	PasswordRecovery(ctx context.Context, in *PasswordRecoveryRequest, opts ...grpc.CallOption) (*PasswordRecoveryResponse, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
+	CreateDefUser(ctx context.Context, in *CreateDefUserRequest, opts ...grpc.CallOption) (*CreateDefUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -119,6 +121,16 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserReques
 	return out, nil
 }
 
+func (c *userServiceClient) CreateDefUser(ctx context.Context, in *CreateDefUserRequest, opts ...grpc.CallOption) (*CreateDefUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateDefUserResponse)
+	err := c.cc.Invoke(ctx, UserService_CreateDefUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
@@ -130,6 +142,7 @@ type UserServiceServer interface {
 	ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error)
 	PasswordRecovery(context.Context, *PasswordRecoveryRequest) (*PasswordRecoveryResponse, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
+	CreateDefUser(context.Context, *CreateDefUserRequest) (*CreateDefUserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -160,6 +173,9 @@ func (UnimplementedUserServiceServer) PasswordRecovery(context.Context, *Passwor
 }
 func (UnimplementedUserServiceServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (UnimplementedUserServiceServer) CreateDefUser(context.Context, *CreateDefUserRequest) (*CreateDefUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDefUser not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -308,6 +324,24 @@ func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_CreateDefUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDefUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).CreateDefUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_CreateDefUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CreateDefUser(ctx, req.(*CreateDefUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -342,6 +376,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUser",
 			Handler:    _UserService_DeleteUser_Handler,
+		},
+		{
+			MethodName: "CreateDefUser",
+			Handler:    _UserService_CreateDefUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
