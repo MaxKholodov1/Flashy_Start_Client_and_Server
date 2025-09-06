@@ -85,7 +85,7 @@ func main() {
 
 	smtpSender := infrastructure.NewSmtpEmailSender(
 		"smtp.yandex.ru", // или smtp.zoho.com, если ты не из Европы
-		587,
+		465,
 		"maxim@flashystart.com", // логин
 		"135790Max.",            // пароль
 		"maxim@flashystart.com", // от кого
