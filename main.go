@@ -84,7 +84,7 @@ func main() {
 	defer dbpool.Close()
 
 	smtpSender := infrastructure.NewSmtpEmailSender(
-		"smtp.yandex.ru", // или smtp.zoho.com, если ты не из Европы
+		"smtp.zoho.eu", // или smtp.zoho.com, если ты не из Европы
 		465,
 		"maxim@flashystart.com", // логин
 		"135790Max.",            // пароль
