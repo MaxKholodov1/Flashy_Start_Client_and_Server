@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package user_progress_card;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "infrastructure/grpc_infr/user_progress_card;user_progress_card";
+enum ShortTermMemory {
+  STM_UNKNOWN = 0;
+  STM_BAD = 1;
+  STM_NORMAL = 2;
+  STM_GOOD = 3;
+  STM_PERFECT = 4;
+}
+enum RecallQuality{
+  BAD = 0;
+  NORMAL = 1;
+  GOOD = 2;
+  PERFECT = 3;
+}
+
+message UserProgressCard{
+  int32 user_id = 1;
+  int32 card_id = 2;
+  string question = 3;
+  string answer = 4;
+  optional google.protobuf.Timestamp next_review_date = 5;
+  optional google.protobuf.Timestamp last_reviewed_at = 6;
+  ShortTermMemory short_term_memory = 7;
+  int32 long_term_memory = 8;
+  int32 repetition_count = 9;
+  int32 deck_id = 10;
+}
+service UserProgressCardService{
+  rpc GetProgressCardsByDeckID (GetProgressCardsByDeckIDRequest) returns (GetProgressCardsByDeckIDResponse);
+  rpc SubmitProgressCardReview (CardReviewRequest) returns (CardReviewResponse);
+  rpc SelectNewProgressCards (ProgressCards) returns (ProgressCards);
+  rpc SelectFamiliarProgressCards (ProgressCards) returns (ProgressCards);
+  rpc GetCardsForTodayReview (GetCardsForTodayReviewRequest) returns (ProgressCards);
+}
+message GetProgressCardsByDeckIDRequest{
+  int32 deckID = 1;
+}
+message GetProgressCardsByDeckIDResponse{
+  repeated UserProgressCard progress_cards = 1;
+}
+message CardReviewRequest {
+  RecallQuality quality = 2;
+  repeated UserProgressCard cards = 1;
+}
+message CardReviewResponse {
+  repeated UserProgressCard cards = 1;
+}
+message ProgressCards{
+  repeated UserProgressCard cards = 1;
+}
+message GetCardsForTodayReviewRequest{
+  int32 deck_id = 1;
+}
+

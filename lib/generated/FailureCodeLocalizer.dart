@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:flashy_start/generated/l10n.dart';
+import '../domain/failures/FailureCode.dart';
+
+String getFailureMessage(
+    BuildContext context,
+    FailureCode code,
+    ) {
+  final s = S.of(context);
+  switch (code) {
+    case FailureCode.networkError:
+      return s.failure_network;
+    case FailureCode.unauthorized:
+      return s.failure_unauthorized;
+    case FailureCode.userNotFound:
+      return s.failure_user_not_found;
+    case FailureCode.serverError:
+      return s.failure_server;
+    case FailureCode.unknownError:
+      return s.failure_unknown;
+    case FailureCode.deckCreatedButFailedToLoad:
+      return s.failure_deck_created_but_failed_to_load;
+    case FailureCode.titleIsEmpty:
+      return s.failure_title_is_empty;
+    case FailureCode.cardsLoadFailedDueToNetwork:
+      return s.failure_cards_load_failed_due_to_network;
+    case FailureCode.cardsLoadFailedDueToUnknownFailure:
+      return s.failure_cards_load_failed_due_to_unknown_failure;
+    case FailureCode.decksLoadFailedDueToNetwork:
+      return s.failure_decks_load_failed_due_to_network;
+    case FailureCode.decksLoadFailedDueToUnknownFailure:
+      return s.failure_decks_load_failed_due_to_unknown_failure;
+    case FailureCode.cardCreatedButFailedToLoadCards:
+      return s.failure_card_created_but_failed_to_load_cards;
+    case FailureCode.invalidCardArgument:
+      return s.failure_invalid_card_argument;
+    case FailureCode.deckPermissionDenied:
+      return s.failure_deck_permission_denied;
+    case FailureCode.cardDeletedButFailedToLoadCards:
+      return s.failure_card_deleted_but_failed_to_load_cards;
+    case FailureCode.deckDeletedButFailedToLoadDecks:
+      return s.failure_deck_deleted_but_failed_to_load_decks;
+    case FailureCode.suchPermissionAlreadyExists:
+      return s.failure_such_permission_already_exists;
+    case FailureCode.conflictCardError:
+      return s.failure_conflict_card_error;
+    case FailureCode.deckUpdatedButFailedGetInfo:
+      return s.failure_deck_updated_but_failed_get_info;
+    case FailureCode.conflictDeckError:
+      return s.failure_conflict_deck_error;
+    case FailureCode.cardWasDeletedRefreshData:
+      return s.failure_card_was_deleted_refresh_data;
+    case FailureCode.noNewCards:
+      return s.no_new_cards;
+    case FailureCode.noFamiliarCards:
+      return s.no_familiar_cards;
+    case FailureCode.noDecksForDailyTasks:
+      return s.no_decks_for_daily_tasks;
+    case FailureCode.noCardsForReview:
+      return s.no_cards_for_review_today;
+    case FailureCode.deletedButFailedLoadDecks:
+      return s.deleted_but_failed_to_load_decks;
+    case FailureCode.authorCantDelete:
+      return s.author_cant_delete_deck_locally;
+    case FailureCode.noCards:
+      return s.no_cards;
+    case FailureCode.needAuthorization:
+      return s.need_authorization;
+    case FailureCode.incorrectOrExpiredCode:
+      return s.incorrectOrExpiredCode;
+    case FailureCode.incorrectPassword:
+      return s.incorrectPassword;
+    case FailureCode.newPasswordSuccessfullySent:
+      return s.newPasswordSuccessfullySent;
+  }
+}

@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package user.service;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "infrastructure/grpc_infr/user/user;user";
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+  rpc GetUser (GetUserRequest) returns (GetUserResponse);
+  rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc SendVerificationCode (SendVerificationCodeRequest) returns (SendVerificationCodeResponse);
+  rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordResponse);
+  rpc PasswordRecovery (PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+  rpc CreateDefUser (CreateDefUserRequest) returns (CreateDefUserResponse);
+}
+message User {
+  string userName = 1;
+  string email = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+message CreateUserRequest {
+  string userName = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message CreateUserResponse {
+  bool is_success = 1;
+  int32 userID = 2;
+}
+
+message VerifyEmailRequest {
+  int32 user_id = 1;
+  string code = 2;
+}
+
+message VerifyEmailResponse {
+  bool is_success = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message GetUserRequest {
+  string access_token = 1;
+}
+
+message GetUserResponse {
+  string user_name = 1;
+  string email = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+message SendVerificationCodeRequest{
+  int32 user_id = 1;
+}
+message SendVerificationCodeResponse{
+  bool is_success = 1;
+}
+message ChangePasswordRequest{
+  string password = 1;
+  string new_password = 2;
+}
+message ChangePasswordResponse{
+  bool isSuccess = 1;
+  string refresh_token = 2;
+  string access_token = 3;
+}
+message PasswordRecoveryRequest{
+  string username_or_email = 1;
+}
+message PasswordRecoveryResponse{
+  bool isSuccess = 1;
+}
+message DeleteUserRequest{
+}
+message DeleteUserResponse{
+  bool is_success = 1;
+}
+message CreateDefUserRequest{
+}
+message CreateDefUserResponse{
+  bool is_success = 1;
+  int32 userID = 2;
+  string access_token = 3;
+  string refresh_token = 4;
+}
+
+

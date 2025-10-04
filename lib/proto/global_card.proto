@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package global_card;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "infrastructure/grpc_infr/global_card;global_card";
+message GlobalCard{
+  int32 id = 1;
+  int32 deckID = 2;
+  string question = 3;
+  string answer = 4;
+  int32 authorID = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  int32 version = 8;
+}
+
+service GlobalCardService {
+  rpc CreateGlobalCard (CreateGlobalCardRequest) returns (CreateGlobalCardResponse);
+  rpc GetGlobalCardsByDeckID (GetGlobalCardsByDeckIDRequest) returns (GetGlobalCardsByDeckIDResponse);
+  rpc UpdateGlobalCard (UpdateGlobalCardRequest) returns (UpdateGlobalCardResponse);
+  rpc DeleteGlobalCard (DeleteGlobalCardRequest) returns (DeleteGlobalCardResponse);
+}
+message CreateGlobalCardRequest{
+  string question = 1;
+  string answer = 2;
+  int32 deckID = 3;
+}
+message CreateGlobalCardResponse{
+  int32 id = 1;
+}
+message GetGlobalCardsByDeckIDRequest{
+  int32 deckID = 1;
+}
+message  GetGlobalCardsByDeckIDResponse{
+  repeated GlobalCard globalCards = 1;
+}
+message UpdateGlobalCardRequest{
+  string question = 1;
+  string answer = 2;
+  int32 cardID = 3;
+  int32 version = 4;
+}
+message UpdateGlobalCardResponse{
+  bool isSuccess = 1;
+  GlobalCard conflictCard = 2;
+}
+message DeleteGlobalCardRequest{
+  int32 card_id = 1;
+}
+message DeleteGlobalCardResponse{
+  bool isSuccess = 1;
+}
