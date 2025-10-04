@@ -6,9 +6,9 @@ import '../../../application/use_cases/user/Login.dart';
 import '../../../cubits/login_and_signup/LoginCubit.dart';
 import '../../widgets/startup_and_log_in/RegistrationFormWidget.dart';
 
-import '../../../../application/use_cases/user/CheckUserNameAvailability.dart';
-import '../../../../application/use_cases/user/CheckUserEmailAvailability.dart';
-import '../../../../application/use_cases/user/CheckUserPasswordAvailability.dart';
+import '../../../application/use_cases/user/CheckUserNameAvailability.dart';
+import '../../../application/use_cases/user/CheckUserEmailAvailability.dart';
+import '../../../application/use_cases/user/CheckUserPasswordAvailability.dart';
 import '../../../cubits/login_and_signup/RegistrationCubit.dart';
 import 'LoginScreen.dart';
 

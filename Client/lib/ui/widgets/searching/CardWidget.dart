@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../domain/entities/GlobalCard.dart';
+import '../../../domain/entities/GlobalCard.dart';
 
 class CardWidget extends StatelessWidget {
   final GlobalCard globalCard;

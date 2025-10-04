@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../generated/l10n.dart';
+import '../../../generated/l10n.dart';
 
 class TextBlockForDeckWidget extends StatefulWidget {
   final String label;

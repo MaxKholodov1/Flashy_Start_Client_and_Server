@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flashy_start/cubits/learning_screens_cubit/LearningScreensCubit.dart';
-import '../../../../../../generated/l10n.dart';
+import '../../../../generated/l10n.dart';
 import 'package:flashy_start/domain/entities/UserDeckProgress.dart';
 
 import '../../../themes/app_colors.dart';

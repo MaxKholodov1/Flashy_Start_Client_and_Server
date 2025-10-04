@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flashy_start/cubits/login_and_signup/StartupCubit.dart';
-import '../../../../generated/FailureCodeLocalizer.dart';
-import '../../../../generated/l10n.dart';
+import '../../../generated/FailureCodeLocalizer.dart';
+import '../../../generated/l10n.dart';
 
 class PasswordRecoveryScreen extends StatefulWidget {
   const PasswordRecoveryScreen({super.key});
